@@ -1,0 +1,13 @@
+.DS_Store
+*.swp
+.tfctl
+pkg/
+*.gem
+vendor/
+.bundle
+bin/bundle
+bin/htmldiff
+bin/ldiff
+bin/rspec
+spec/reports
+Gemfile.lock

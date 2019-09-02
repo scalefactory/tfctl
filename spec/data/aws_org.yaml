@@ -1,0 +1,68 @@
+---
+:accounts:
+- :name: shared-services
+  :id: '0123456789'
+  :arn: arn:aws:organizations::0123456789:account/o-lfhekdlsn/0123456789
+  :email: shared-services+aws@example.com
+  :ou_path: core
+  :ou_parents:
+  - core
+  :profiles: []
+- :name: log-archive
+  :id: '1123456789'
+  :arn: arn:aws:organizations::0123456789:account/o-lfhekdlsn/1123456789
+  :email: log-archive+aws@example.com
+  :ou_path: core
+  :ou_parents:
+  - core
+  :profiles: []
+- :name: security
+  :id: '2123456789'
+  :arn: arn:aws:organizations::0123456789:account/o-lfhekdlsn/2123456789
+  :email: security+aws@example.com
+  :ou_parents:
+  - core
+  :profiles: []
+- :name: primary
+  :id: '3123456789'
+  :arn: arn:aws:organizations::0123456789:account/o-lfhekdlsn/3123456789
+  :email: primary+aws@example.com
+  :ou_path: root
+  :ou_parents: []
+  :profiles: []
+- :name: team-live-1
+  :id: '4123456789'
+  :arn: arn:aws:organizations::0123456789:account/o-lfhekdlsn/4123456789
+  :email: team-live-1+aws@example.com
+  :ou_path: team/live
+  :ou_parents:
+  - team
+  - live
+  :profiles: []
+- :name: team-live-2
+  :id: '5123456789'
+  :arn: arn:aws:organizations::0123456789:account/o-lfhekdlsn/5123456789
+  :email: team-live-2+aws@example.com
+  :ou_path: team/live
+  :ou_parents:
+  - team
+  - live
+  :profiles: []
+- :name: team-test-1
+  :id: '6123456789'
+  :arn: arn:aws:organizations::0123456789:account/o-lfhekdlsn/6123456789
+  :email: team-test-1+aws@example.com
+  :ou_path: team/test
+  :ou_parents:
+  - team
+  - test
+  :profiles: []
+- :name: team-test-2
+  :id: '7123456789'
+  :arn: arn:aws:organizations::0123456789:account/o-lfhekdlsn/7123456789
+  :email: team-test-2+aws@example.com
+  :ou_path: team/test
+  :ou_parents:
+  - team
+  - test
+  :profiles: []

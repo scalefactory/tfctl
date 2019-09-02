@@ -1,0 +1,82 @@
+#
+# Example Tfctl configuration for AWS Landing Zone
+#
+# https://aws.amazon.com/solutions/aws-landing-zone/
+#
+# The data in this file is merged with data from AWS Organizations API to
+# create final configuration used by tfctl.  You can view the merged
+# configuration by running:
+#
+#   tfctl -c conf/landing_zone.yaml -s
+#
+
+#
+# Terraform configuration
+#
+
+# Terraform state management
+
+tf_state_bucket: 'CHANGEME-terraform-state'
+# Terraform will assume this role to manage state.
+tf_state_role_arn: 'arn:aws:iam::CHANGEME:role/TerraformStateUser'
+tf_state_dynamodb_table: 'terraform-lock'
+tf_state_region: 'eu-west-1'
+
+# Role used by tfctl to retrive data from AWS Organization API
+# Has to be set up in the primary Landing Zone account
+tfctl_role_arn: 'arn:aws:iam::CHANGEME:role/TfctlUser'
+
+
+#
+# Organization configuration
+#
+
+# IMPORTANT: Removing a Terraform profile here will remove all of it's
+#            associated resources in AWS!
+
+# Name of the primary account.  This account is used to manage AWS Organization.
+primary_account: primary
+
+# For security/compliance reasons you may want to exclude some Landing Zone
+# core accounts from terraform actions.
+exclude_accounts:
+  - primary
+  - security
+  - log-archive
+
+# Settings to apply to all accounts
+organization_root:
+  # Role assumed by Terraform in each account
+  tf_execution_role: 'TerraformUser'
+  region: 'eu-west-1'
+
+  global_bucket_name: 'example-global-bucket'
+  profiles:
+    - eg-global-bucket
+
+# Settings to apply to accounts in Organization Units
+organization_units:
+  core: {}
+
+  team:
+    shared_bucket_name: 'example-shared-bucket'
+    profiles:
+      - eg-shared-bucket
+  team/live:
+    live_bucket_name: 'example-live-bucket'
+    profiles:
+      - eg-live-bucket
+  team/test:
+    test_bucket_name: 'example-test-bucket'
+    profiles:
+      - eg-test-bucket
+    # Override bucket names set higher in OU hierarchy
+    shared_bucket_name: 'example-shared-bucket-override'
+    global_bucket_name: 'example-global-bucket-override'
+
+# Settings to apply to individual accounts
+account_overrides:
+
+  # Override test bucket name for specific account
+  euwest1-test-team-1:
+    test_bucket_name: 'example-test-bucket-override'
