@@ -48,7 +48,7 @@ This will build a ruby gem and install it.
 When using bundler, add this to your `Gemfile`:
 
 ----
-gem 'tfctl', git: 'https://github.com/scalefactory/tfctl'
+gem 'tfctl', git: 'https://github.com/essentia-team/tfctl'
 ----
 
 == Project layout
