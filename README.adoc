@@ -24,8 +24,8 @@ Organizations.
 * Supports per account configuration overrides for handling exceptions.
 * Automatically generates Terraform account configuration.
 * Terraform state tracking in S3 and locking in DynamoDB.
-* Can run Terraform in parallel across multiple accounts.
-* Account targetting by OU path regular expressions.
+* Can execute Terraform in parallel across multiple accounts.
+* Account targeting by OU path regular expressions.
 * Works with CI/CD pipelines.
 
 == Requirements
@@ -48,7 +48,7 @@ This will build a ruby gem and install it.
 When using bundler, add this to your `Gemfile`:
 
 ----
-gem 'tfctl', git: 'https://github.com/essentia-team/tfctl'
+gem 'tfctl', git: 'https://github.com/scalefactory/tfctl'
 ----
 
 == Project layout

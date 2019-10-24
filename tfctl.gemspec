@@ -11,8 +11,8 @@ Gem::Specification.new do |spec|
     spec.email         = [
         'akw@scalefactory.com'
     ]
-    spec.summary       = 'Terraform wrapper for managing dynamic, multi-account AWS environments'
-    spec.homepage      = 'https://github.com/essentia-team/tfctl'
+    spec.summary       = 'Terraform wrapper for managing multi-account AWS infrastructures'
+    spec.homepage      = 'https://github.com/scalefactory/tfctl'
     spec.license       = "MIT"
     spec.files         = `git ls-files -z`.split("\x0").reject { |f|
         f.match(%r{^(test|spec|features)/})
