@@ -1,0 +1,167 @@
+== Control Tower integration guide
+
+This guide will help you integrate Terraform with AWS Control tower using the
+tfctl wrapper.  This involves setting up resources for remote state tracking,
+necessary IAM roles and a tfctl project configuration.
+
+=== Overview
+
+For state tracking we're going to set up a dedicated `shared-services` account
+under a `mgmt` organization unit.  We'll use S3 for state storage and DynamoDB
+for locking.  A dedicated `TerraformState` IAM role will be created for access
+to state resources cross account from the primary account.
+
+In the primary account we'll create a `TfctlOrgAccess` role.  It gives tfctl
+ready only access to AWS Organizations which is used to discover accounts and
+the organization unit structure.
+
+We'll use CloudFormation stacks and stack-sets to bootstrap those resources.
+
+For executing Terraform in targets accounts we'll utilise the
+`AWSControlTowerExecution` role which is automatically created by Control Tower
+account factory and can be assumed from the primary account.
+
+For the sake of an example we're going to create a couple of organization units
+in Control Tower: `live` and `test` and provision some accounts for testing.
+
+=== Prerequisites
+
+Before starting you'll need:
+
+ * Control Tower set up in your primary account.
+ * A user with `AdministratorAccess` privileges in primary account.
+ * AWS CLI tools installed on your machine.
+ * Terraform 0.12 or higher.
+
+=== Control Tower configuration
+
+Create the following organization units in Control Tower:
+
+ * `mgmt`
+ * `live`
+ * `test`
+
+Then provision accounts:
+
+ * In `mgmt` OU create an account called `mgmt-shared-services`
+ * In `live` create `live-example1`
+ * In `test` create `test-example1`
+
+NOTE: Control Tower accounts need to be provisioned one at a time.  It takes
+approximately 20 mins to provision one.
+
+=== Install tfctl
+
+----
+git clone git@github.com:scalefactory/tfctl.git
+make install
+----
+
+=== Set up AWS resources
+
+It's assumed you have configured AWS CLI access to the primary account.
+
+We'll use CloudFormation templates in `examples/bootstrap/`.
+
+First export configuration using environment variables making sure to change to
+values to suit your set up:
+
+----
+export PRIMARY_ACCOUNT_ID=11111111
+export SHARED_SERVICES_ACCOUNT_ID=22222222
+export STATE_BUCKET_NAME='example-terraform-state'
+----
+
+Create the remote state resources stack set:
+
+----
+cd examples/bootstrap/
+
+aws cloudformation create-stack-set \
+    --stack-set-name TerraformState \
+    --template-body file://terraform-state.template \
+    --description "Resources for managing Terraform state" \
+    --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
+    --execution-role-name AWSControlTowerExecution \
+    --administration-role-arn arn:aws:iam::${PRIMARY_ACCOUNT_ID}:role/service-role/AWSControlTowerStackSetRole \
+    --parameters ParameterKey=PrimaryAccountId,ParameterValue=${PRIMARY_ACCOUNT_ID} \
+    ParameterKey=TerraformStateBucket,ParameterValue=${STATE_BUCKET_NAME}
+----
+
+Create a stack set instance in you shared services account:
+
+----
+aws cloudformation create-stack-instances \
+    --stack-set-name TerraformState \
+    --accounts ${SHARED_SERVICES_ACCOUNT_ID} \
+    --regions eu-west-1
+----
+
+Verify in console that the stack set instance deployed successfully.
+
+Deploy `TfctlOrgAccess` IAM role stack:
+
+----
+aws cloudformation create-stack \
+    --stack-name TfctlOrgAccess \
+    --template-body file://tfctl-org-access.template \
+    --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
+    --parameters ParameterKey=PrimaryAccountId,ParameterValue=${PRIMARY_ACCOUNT_ID}
+----
+
+=== Configure tfctl
+
+Copy the example project directory `examples/control_tower` somewhere convenient
+and edit `conf/example.yaml`.
+
+You need to modify the following parameters:
+
+ * `tf_state_bucket` - set to `$STATE_BUCKET_NAME`
+ * `tf_state_role_arn` - set shared services account ID
+ * `tfctl_role_arn` - set primary account ID
+ * `primary_account` - set the primary account name.  You can find it in AWS Organizations.
+
+TIP: You should keep your project directory under version control.
+
+=== Deploy example tfctl profile
+
+The example profile will create an S3 bucket in accounts under `test`, `live`
+and `mgmt` OUs.
+
+First dump the configuration to verify everything works:
+
+----
+tfctl -c conf/example.yaml -s
+----
+
+This will not make any changes but will print out a yaml containing the final,
+merged configuration data.  It should contain a list of discovered accounts and
+their configuration.
+
+Initialise terraform for all discovered accounts:
+
+----
+tfctl -c conf/example.yaml --all -- init
+----
+
+Tfctl will run Terraform against all accounts in parallel.
+
+Run plan:
+
+----
+tfctl -c conf/example.yaml --all -- plan
+----
+
+and apply:
+
+----
+tfctl -c conf/example.yaml --all -- apply
+----
+
+To destroy created resources run:
+
+----
+tfctl -c conf/example.yaml --all -- destroy -auto-approve
+----
+
+That's it! You can now execute terraform across your Control Tower estate.

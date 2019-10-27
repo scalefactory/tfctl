@@ -1,0 +1,42 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Create Tfctl IAM role used to workout AWS account topolgy
+
+Parameters:
+  PrimaryAccountId:
+    Type: String
+    Description: Primary organization account ID
+
+Resources:
+  TfCtlRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: TfctlRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS:
+                - !Sub 'arn:aws:iam::${PrimaryAccountId}:root'
+            Action:
+              - sts:AssumeRole
+      Path: /
+      Policies:
+        - PolicyName: TfctlOrgAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - organizations:ListAccounts
+                  - organizations:ListAccountsForParent
+                  - organizations:ListChildren
+                  - organizations:ListRoots
+                  - organizations:DescribeOrganizationalUnit
+                Resource:
+                  - '*'
+
+Outputs:
+  TfCtlUserArn:
+    Description: tfctl role arn
+    Value: !GetAtt 'TfCtlRole.Arn'
