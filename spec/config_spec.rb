@@ -132,4 +132,15 @@ RSpec.describe Tfctl::Config do
             expect(account[:ou_parents]).not_to include('core')
         end
     end
+
+    it 'should flag excluded accounts' do
+        config[:accounts].each do |account|
+            if ['primary', 'security', 'log-archive'].include?(account[:name])
+                expect(account[:excluded]).to eq(true)
+            else
+                expect(account[:excluded]).to eq(false)
+            end
+        end
+    end
+
 end
