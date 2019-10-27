@@ -97,7 +97,14 @@ aws cloudformation create-stack-instances \
     --regions eu-west-1
 ----
 
-Verify in console that the stack set instance deployed successfully.
+Check status:
+
+----
+aws cloudformation describe-stack-instance \
+    --stack-set-name TerraformState \
+    --stack-instance-account ${SHARED_SERVICES_ACCOUNT_ID} \
+    --stack-instance-region eu-west-1
+----
 
 Deploy `TfctlOrgAccess` IAM role stack:
 
@@ -107,6 +114,12 @@ aws cloudformation create-stack \
     --template-body file://tfctl-org-access.template \
     --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
     --parameters ParameterKey=PrimaryAccountId,ParameterValue=${PRIMARY_ACCOUNT_ID}
+----
+
+Check status:
+
+----
+aws cloudformation describe-stacks --stack-name TfctlOrgAccess
 ----
 
 === Configure tfctl
