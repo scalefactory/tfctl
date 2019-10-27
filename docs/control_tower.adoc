@@ -1,12 +1,12 @@
 == Control Tower integration guide
 
-This guide will help you integrate Terraform with AWS Control tower using the
+This guide will help you integrate Terraform with AWS Control Tower using the
 tfctl wrapper.  This involves setting up resources for remote state tracking,
-necessary IAM roles and a tfctl project configuration.
+necessary IAM roles and a tfctl project.
 
 === Overview
 
-For state tracking we're going to set up a dedicated `shared-services` account
+For state tracking we're going to create a dedicated `shared-services` account
 under a `mgmt` organization unit.  We'll use S3 for state storage and DynamoDB
 for locking.  A dedicated `TerraformState` IAM role will be created for access
 to state resources cross account from the primary account.
@@ -17,7 +17,7 @@ the organization unit structure.
 
 We'll use CloudFormation stacks and stack-sets to bootstrap those resources.
 
-For executing Terraform in targets accounts we'll utilise the
+For executing Terraform in spoke accounts we'll utilise the
 `AWSControlTowerExecution` role which is automatically created by Control Tower
 account factory and can be assumed from the primary account.
 
@@ -54,7 +54,7 @@ approximately 20 mins to provision one.
 
 ----
 git clone git@github.com:scalefactory/tfctl.git
-make install
+cd tfctl/ && sudo make install
 ----
 
 === Set up AWS resources
@@ -106,6 +106,8 @@ aws cloudformation describe-stack-instance \
     --stack-instance-region eu-west-1
 ----
 
+NOTE: Initial status will be `OUTDATED`, it should change to `CURRENT` once deployed.
+
 Deploy `TfctlOrgAccess` IAM role stack:
 
 ----
@@ -121,6 +123,8 @@ Check status:
 ----
 aws cloudformation describe-stacks --stack-name TfctlOrgAccess
 ----
+
+NOTE: Successful status should read: `CREATE_COMPLETE`.
 
 === Configure tfctl
 
@@ -140,6 +144,8 @@ TIP: You should keep your project directory under version control.
 
 The example profile will create an S3 bucket in accounts under `test`, `live`
 and `mgmt` OUs.
+
+NOTE: Run tfctl commands from the root of you project directory.
 
 First dump the configuration to verify everything works:
 
@@ -178,3 +184,6 @@ tfctl -c conf/example.yaml --all -- destroy -auto-approve
 ----
 
 That's it! You can now execute terraform across your Control Tower estate.
+
+TIP: Your project directory should be under version control excluding the
+`.tfctl` directory which is automatically generated.
