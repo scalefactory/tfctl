@@ -111,7 +111,7 @@ module Tfctl
 
         # Sets :excluded property on any excluded accounts
         def mark_excluded_accounts(config)
-          return unless config.has_key?(:exclude_accounts)
+          return config unless config.has_key?(:exclude_accounts)
 
           config[:accounts].each_with_index do |account, idx|
               if config[:exclude_accounts].include?(account[:name])

@@ -50,7 +50,7 @@ organization_root:
 # Configuration to apply to accounts in Organization Units
 # Units not listed here will be ignored
 organization_units:
-  # Uncomment if you want to include account under the Core OU
+  # Uncomment if you want to include accounts under the Core OU
   # Core: {}
   live: {}
   test: {}
@@ -64,8 +64,8 @@ account_overrides:
     # Override the bucket name in specific account
     example_bucket_name: 'tfctl-account-override-example'
 
-# For security/compliance reasons you may want to exclude some accounts from
-# Terraform runs.
-exclude_accounts: []
-  # - Audit
-  # - 'Log Archive'
+
+# Exclude individual accounts from Terraform runs.
+#exclude_accounts:
+#   - Audit
+#   - 'Log archive'
