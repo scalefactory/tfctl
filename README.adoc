@@ -55,11 +55,11 @@ gem 'tfctl', git: 'https://github.com/scalefactory/tfctl'
 
 == Docs
 
- * https://github.com/scalefactory/tfctl/docs/control_tower.adoc[Control Tower quick start guide]
- * https://github.com/scalefactory/tfctl/docs/project_layout.adoc[Project layout]
- * https://github.com/scalefactory/tfctl/docs/configuration.adoc[Configuration]
- * https://github.com/scalefactory/tfctl/docs/iam_permissions.adoc[IAM permissions]
- * https://github.com/scalefactory/tfctl/docs/creating_a_profile.adoc[Creating a profile]
+ * https://github.com/scalefactory/tfctl/tree/master/docs/control_tower.adoc[Control Tower quick start guide]
+ * https://github.com/scalefactory/tfctl/tree/master/docs/project_layout.adoc[Project layout]
+ * https://github.com/scalefactory/tfctl/tree/master/docs/configuration.adoc[Configuration]
+ * https://github.com/scalefactory/tfctl/tree/master/docs/iam_permissions.adoc[IAM permissions]
+ * https://github.com/scalefactory/tfctl/tree/master/docs/creating_a_profile.adoc[Creating a profile]
 
 == Running tfctl
 
