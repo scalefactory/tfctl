@@ -1,39 +1,41 @@
 :toc:
 
-= Tfctl
+= tfctl
 
 == Overview
 
-Tfctl is a Terraform wrapper for working with multi-account AWS infrastructures
-where new accounts may be created dynamically and on-demand.
+Tfctl is a small Terraform wrapper for working with multi-account AWS
+infrastructures where new accounts may be created dynamically and on-demand.
 
-It can discover accounts by reading the AWS Organizations API and assign
-Terraform resources to accounts based on the organization hierarchy and a yaml
-configuration file.  Resources can be assigned globally, based on organization
-unit or individual accounts.  It supports nested OU hierarchies.
+Discovers accounts by reading the AWS Organizations API and can assign
+Terraform resources to accounts based on the organization hierarchy.  Resources
+can be assigned globally, based on organization unit or individual accounts.
+It supports nested OU hierarchies.
 
-Tfctl was originally developed to integrate with AWS Landing Zone and Control
-Tower but can work with most other ways of managing accounts in AWS
-Organizations.
+Tfctl was originally developed to integrate Terraform with
+https://aws.amazon.com/solutions/aws-landing-zone/[AWS Landing Zone] and
+https://aws.amazon.com/controltower/[Control Tower] but should work with most
+other ways of managing accounts in AWS Organizations.
 
 == Features
 
-* Hierarchical configuration based on AWS Organization structure.
-* Merging configuration from least specific to most specific.
-* Supports nested organization units.
-* Supports per account configuration overrides for handling exceptions.
+* Discovers AWS accounts automatically.
 * Automatically generates Terraform account configuration.
+* Parallel execution across multiple accounts.
+* Hierarchical configuration based on AWS Organization units structure.
+* Supports per account configuration overrides for handling exceptions.
+* Supports nested organization units.
 * Terraform state tracking in S3 and locking in DynamoDB.
-* Can execute Terraform in parallel across multiple accounts.
 * Account targeting by OU path regular expressions.
+* Automatic role assumption in target accounts.
 * Works with CI/CD pipelines.
 
 == Requirements
 
  * Terraform >= 0.12
  * Ruby >= 2.3
- * Accounts managed in AWS Organizations (by Landing Zone, Control Tower, some other means)
- * Limited access to primary AWS Organizations account (see below for required permissions)
+ * Accounts managed in AWS Organizations (by Landing Zone, Control Tower, some
+   other means)
 
 == Installation
 
@@ -51,107 +53,37 @@ When using bundler, add this to your `Gemfile`:
 gem 'tfctl', git: 'https://github.com/scalefactory/tfctl'
 ----
 
-== Project layout
+== Docs
 
-`examples/` contains and example Tfctl project layout.  It consists of the
-following components:
+ * https://github.com/scalefactory/tfctl/tree/master/docs/control_tower.adoc[Control Tower quick start guide]
+ * https://github.com/scalefactory/tfctl/tree/master/docs/project_layout.adoc[Project layout]
+ * https://github.com/scalefactory/tfctl/tree/master/docs/configuration.adoc[Configuration]
+ * https://github.com/scalefactory/tfctl/tree/master/docs/iam_permissions.adoc[IAM permissions]
+ * https://github.com/scalefactory/tfctl/tree/master/docs/creating_a_profile.adoc[Creating a profile]
 
-=== Tfctl configuration file
+== Running tfctl
 
-Assigns Terraform profiles and configuration to accounts based on:
-
-* Account's organization unit
-* Globally for all accounts
-* Individual accounts
-
-It also defines Terraform and Tfctl configuration such as state tracking and
-IAM roles to use.
-
-=== Terraform profiles
-
-Profiles are re-usable collections of resources which can be applied to
-accounts.  They are implemented as Terraform modules but provide an
-intermediate bridge between usual Terraform modules and Tfctl configuration
-(and / or other data sources).  Profiles often compose multiple modules and
-provide configuration data to them.  This approach makes it possible to re-use
-standard modules available online (e.g. Terraform module registry) without
-having to modify them.
-
-=== Terraform modules
-
-Standard terraform modules.
-
-== Configuration
-
-Tfctl retrieves initial account configuration from AWS Organizations and merges
-it with configuration stored in the yaml config file.
-
-The configuration is merged in the following order:
-
-* AWS Organizations data is fetched and stored in an `accounts` array.
-* `organization_root` settings are merged with all accounts.
-* `organization_units` settings are merged with accounts matching the OU.
-* `account_overrides` are merged with individual accounts matching the account name.
-
-Parameters further down the hierarchy take precedence.  For example:
-
-[source, yaml]
-----
-organization_root:
-  example_param: 'will be overriden further down'
-
-organization_units:
-  team:
-    example_param: 'will win in team ou'
-  team/live:
-    example_param: 'will win in team/live ou'
-----
-
-One exception to this rule is the `profiles` parameter.  Profiles are additive:
-
-[source, yaml]
-----
-organization_root:
-  profiles:
-   - profile-one
-   - profile-two
-
-organization_units:
-  team:
-    profiles:
-      - profile-three
-----
-
-This will result in all three profiles deployed to accounts in `team` OU.
-
-TIP: You can display the fully merged configuration by running `tfctl -c
-conf/CONFIG_FILE.yaml -s`.  It's safe to run as it doesn't make any changes to
-AWS resources.  It's a good way to test your configuration.
-
-== Running Tfctl
-
-Tfctl should be run from the root of the project directory.  It will generate
+tfctl should be run from the root of the project directory.  It will generate
 Terraform configuration in `.tfctl/`.
 
-Anatomy of a Tfctl command:
+Anatomy of a tfctl command:
 
 ----
 tfctl -c CONFIG_FILE TARGET_OPTIONS -- TERRAFORM_COMMAND
 ----
 
-* `-c` specifies which Tfctl config file to use (usually in `conf/`)
+* `-c` specifies which tfctl config file to use (usually in `conf/`)
 * `TARGET_OPTIONS` specifies which accounts to target.  This could be an individual
   account, a group of accounts in an organizational unit or all accounts.
 * `TERRAFORM_COMMAND` will be passed to `terraform` along with any
   options.  See https://www.terraform.io/docs/commands/index.html[Terraform
   commands] for details.
 
-
-NOTE: You must have your AWS credentials configured before running `tfctl` or
-run it using an AWS credentials helper tool such as
+NOTE: You must have your AWS credentials configured before running tfctl or run
+it using an AWS credentials helper such as
 https://github.com/99designs/aws-vault[aws-vault].
 
-=== Examples
+=== Example commands
 
 Show help:
 
@@ -165,16 +97,16 @@ Show merged configuration:
 tfctl -c conf/example.yaml -s
 ----
 
-Run Terraform init for all accounts:
+Run Terraform init accross all accounts:
 
 ----
 tfctl -c conf/example.yaml --all -- init
 ----
 
-Run plan in `team` OU accounts:
+Run plan in `test` OU accounts:
 
 ----
-tfctl -c conf/example.yaml -o team -- plan
+tfctl -c conf/example.yaml -o test -- plan
 ----
 
 Run plan in `live` accounts assuming that `live` is a child OU in multiple
@@ -187,7 +119,7 @@ tfctl -c conf/example.yaml -o '.*/live' -- plan
 Run plan in an individual account:
 
 ----
-tfctl -c conf/example.yaml -a euwest1-live-team - plan
+tfctl -c conf/example.yaml -a example-account - plan
 ----
 
 Run apply in all accounts:
@@ -196,280 +128,18 @@ Run apply in all accounts:
 tfctl -c conf/example.yaml --all -- apply
 ----
 
-Run destroy in `team` OU accounts:
+Run destroy in `test` OU accounts:
 
 ----
-tfctl -c conf/example.yaml -o team -- destroy -auto-approve
+tfctl -c conf/example.yaml -o test -- destroy -auto-approve
 ----
 
 Don't buffer the output:
 
 ----
-tfctl -c conf/example.yaml -a euwest1-live-team -u -- plan
+tfctl -c conf/example.yaml -a example-account -u -- plan
 ----
 
 This will show output in real time.  Usually output is buffered and displayed
 after Terraform command finishes to make it more readable when running across
 multiple accounts in parallel.
-
-== Handling secrets
-
-No secrets should be committed into Terraform or Tfctl configuration.  Use AWS
-Secrets Manager instead and retrieve in Terraform profiles using
-https://www.terraform.io/docs/providers/aws/d/secretsmanager_secret.html[secrets
-manager data source]
-
-== IAM roles
-
-In production Tfctl should have at least three separate IAM roles configured
-for Organization access, state management and Terraform execution.
-
-The user executing Tfctl needs permission to assume all three roles.
-
-Additional Terraform execution roles can configured if necessary on a per OU or
-account basis to, for example, restrict access to some accounts depending on
-who is executing Tfctl.
-
-When testing or in non critical environments all three roles can be set to the
-same admin role.
-
-Tfctl and Terraform assume roles automatically when necessary.
-
-*TfCtlUser*
-
-Used by Tfctl to work out the account topology from AWS Organizations API.
-This role has to be set up in primary Organization account.
-
-.TfCtlUser IAM policy
-[source, json]
-----
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Action": [
-                "organizations:ListAccounts",
-                "organizations:ListAccountsForParent",
-                "organizations:ListChildren",
-                "organizations:ListRoots",
-                "organizations:DescribeOrganizationalUnit"
-            ],
-            "Resource": [
-                "*"
-            ],
-            "Effect": "Allow"
-        }
-    ]
-}
-----
-
-*TerraformStateUser*
-
-Used to manage Terraform state files in S3 and state locking in DynamoDB. It
-needs to be set up in one designated account but it can be any account.
-
-.TerraformStateUser IAM policy
-[source, json]
-----
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Action": [
-                "s3:PutObject",
-                "s3:GetBucketPolicy",
-                "s3:GetObject",
-                "s3:ListBucket",
-                "dynamodb:PutItem",
-                "dynamodb:DeleteItem",
-                "dynamodb:GetItem"
-            ],
-            "Resource": [
-                "arn:aws:s3:::CHANGEME-terraform-state",
-                "arn:aws:s3:::CHANGEME-terraform-state/*",
-                "arn:aws:dynamodb:eu-west-1:CHANGEME:table/terraform-lock"
-            ],
-            "Effect": "Allow"
-        }
-    ]
-}
-----
-
-*TerraformUser*
-
-This role is used to manage the actual resources in each AWS account.  Usually
-has admin access for that account but can be locked down if necessary.
-
-== Example workflow
-
-This is a guided, step by step example of how to create a Tfctl profile from
-scratch, declare some resources in it and deploy it to to a group of accounts
-in an OU
-
-=== Create a new profile
-
-Create a new profile directory:
-
-----
-mkdir profiles/example-profile
-----
-
-Within the new profile directory create `data.tf`:
-
-.data.tf
-[source, tf]
-----
-data "aws_caller_identity" "current" {}
-----
-
-This file contains Terraform
-https://www.terraform.io/docs/configuration/data-sources.html[data source]
-declarations.  Data sources are a way of getting data not directly managed in
-Terraform into Terraform.  In this case we're using the
-https://www.terraform.io/docs/providers/aws/d/caller_identity.html[aws_caller_identity]
-data source.  One of the outputs of this source is `account_id` which will
-return the id of the account Terraform is currently running in.  We will use
-this data in the next step.
-
-Now create `variables.tf`:
-
-.variables.tf
-[source, tf]
-----
-# input variables
-variable "config" {
-  description = "Configuration generated by tfctl in string encoded JSON format"
-  type = string
-}
-
-# local variables
-locals {
-  # Decode config JSON into a Terraform data structure
-  config = jsondecode(var.config)
-
-  # Get current account id from aws_caller_identity data source
-  current_account_id = "${data.aws_caller_identity.current.account_id}"
-
-  # Get tfctl configuration for the current account
-  current_account_conf = [ for account in local.config["accounts"]: account if account["id"] == local.current_account_id ][0]
-}
-----
-
-This file contains
-https://www.terraform.io/docs/configuration/variables.html[input variables] for
-our profile.
-
-The `config` variable is special and must always be declared in a profile.
-Tfctl will pass configuration to a profile through it.  This configuration
-includes an array of all accounts as well as other parameters defined in Tfctl
-config.
-
-TIP: You can run `tfctl -c conf/CONFIG_FILE.yaml -s` to show the config
-data in yaml format for inspection.  This exact data is available in the
-`config` variable in your profile.
-
-We also have few https://www.terraform.io/docs/configuration/locals.html[local
-variables] defined in the `locals` block.  We assign the current account id
-from the data source we defined previously to `current_account_id`.  This is
-mainly for convenience to make the next statement easier to read.
-`current_account` loops over the `config` data and returns configuration for an
-account which matches the current account id (i.e. the current account
-configuration).
-
-Now that we have our data inputs sorted we can start declaring actual AWS
-resources we want to manage.
-
-Create `main.tf`:
-
-.main.tf
-[source, tf]
-----
-resource "aws_s3_bucket" "example" {
-  bucket = "tfctl-example-${local.current_account_conf["name"]}"
-  acl    = "private"
-}
-----
-
-This will create an S3 bucket with a name containing the current account name
-(which will vary depending on which account we deploy it to).
-
-=== Assign profile to accounts
-
-Before we can deploy our new profile we need to tell `tfctl` which accounts to
-deploy it to.
-
-We have few options here:
-
-* deploy to all accounts
-* deploy to specific organization unit (OU)
-* deploy to individual account
-
-
-For the sake of this example we're going to deploy our bucket to all accounts
-in `team` OU.
-
-In Tfctl config add your profile to the `team` OU:
-
-[source, yaml]
-----
-organization_units:
-  team:
-    profiles:
-      - example-profile
-----
-
-
-=== Plan
-
-To see what would happen when the change is applied run:
-
-----
-tfctl -c conf/example.yaml -o team -- init
-tfctl -c conf/example.yaml -o team -- plan
-----
-
-This will run `terraform init` to initialise terraform and then `terraform
-plan` across all accounts in the `team` OU in parallel.  It will display a diff
-of changes for each account.
-
-.example terraform plan
-----
-info: euwest1-team-live: Terraform will perform the following actions:
-info: euwest1-team-live:
-info: euwest1-team-live:   # module.example-profile.aws_s3_bucket.example will be created
-info: euwest1-team-live:   + resource "aws_s3_bucket" "example" {
-info: euwest1-team-live:       + acceleration_status         = (known after apply)
-info: euwest1-team-live:       + acl                         = "private"
-info: euwest1-team-live:       + arn                         = (known after apply)
-info: euwest1-team-live:       + bucket                      = "tfctl-example-euwest1-team-live"
-info: euwest1-team-live:       + bucket_domain_name          = (known after apply)
-info: euwest1-team-live:       + bucket_regional_domain_name = (known after apply)
-info: euwest1-team-live:       + force_destroy               = false
-info: euwest1-team-live:       + hosted_zone_id              = (known after apply)
-info: euwest1-team-live:       + id                          = (known after apply)
-info: euwest1-team-live:       + region                      = (known after apply)
-info: euwest1-team-live:       + request_payer               = (known after apply)
-info: euwest1-team-live:       + website_domain              = (known after apply)
-info: euwest1-team-live:       + website_endpoint            = (known after apply)
-info: euwest1-team-live:
-info: euwest1-team-live:       + versioning {
-info: euwest1-team-live:           + enabled    = (known after apply)
-info: euwest1-team-live:           + mfa_delete = (known after apply)
-info: euwest1-team-live:         }
-info: euwest1-team-live:     }
-info: euwest1-team-live:
-info: euwest1-team-live: Plan: 1 to add, 0 to change, 0 to destroy.
-----
-
-If there are errors in your profile, terraform will fail and usually indicate
-what went wrong.
-
-Tfctl will generate a plan file automatically and use it with `apply` in the
-next step.
-
-=== Apply
-
-Once you're happy with the plan, apply it.
-----
-tfctl -c conf/example.yaml -o team -- apply
-----

@@ -1,0 +1,53 @@
+== Configuration
+
+Tfctl retrieves initial account configuration from AWS Organizations and merges
+it with organization config specified in the yaml file.
+
+The configuration is merged in the following order:
+
+* AWS Organizations data is fetched and stored in an `accounts` array.
+* `organization_root` settings are merged with all accounts.
+* `organization_units` settings are merged with accounts matching the OU.
+* `account_overrides` are merged with individual accounts matching the account name.
+
+Parameters further down the hierarchy take precedence.  For example:
+
+[source, yaml]
+----
+organization_root:
+  example_param: 'will be overriden further down'
+
+organization_units:
+  team:
+    example_param: 'will win in team ou'
+  team/live:
+    example_param: 'will win in team/live ou'
+----
+
+One exception to this rule is the `profiles` parameter.  Profiles are additive:
+
+[source, yaml]
+----
+organization_root:
+  profiles:
+   - profile-one
+   - profile-two
+
+organization_units:
+  team:
+    profiles:
+      - profile-three
+----
+
+This will result in all three profiles deployed to accounts in `team` OU.
+
+TIP: You can display the fully merged configuration by running `tfctl -c
+conf/CONFIG_FILE.yaml -s`.  It's safe to run as it doesn't make any changes to
+AWS resources.  It's a good way to test your configuration.
+
+=== Handling secrets
+
+No secrets should be committed into Terraform or tfctl configuration.  Use AWS
+Secrets Manager instead and retrieve in Terraform profiles using
+https://www.terraform.io/docs/providers/aws/d/secretsmanager_secret.html[secrets
+manager data source]

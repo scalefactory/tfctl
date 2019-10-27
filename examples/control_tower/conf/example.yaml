@@ -1,0 +1,71 @@
+#
+# Example Tfctl configuration for AWS Control Tower
+#
+# The data in this file is merged with data from AWS Organizations API to
+# create final configuration used by tfctl.  You can view the merged
+# configuration by running:
+#
+#   tfctl -c conf/example.yaml -s
+#
+
+#
+# Terraform configuration
+#
+
+# State management
+
+tf_state_bucket: 'CHANGEME'
+tf_state_dynamodb_table: 'terraform-lock'
+tf_state_region: 'eu-west-1'
+# Role for accessing state resources
+tf_state_role_arn: 'arn:aws:iam::SHARED_SERVICES_ACCOUNT_ID:role/TerraformStateRole'
+
+# Role used by tfctl to retrieve data from AWS Organizations
+# Has to be set up in the primary org account
+tfctl_role_arn: 'arn:aws:iam::PRIMARY_ACCOUNT_ID:role/TfctlRole'
+
+#
+# Organization configuration
+#
+
+# IMPORTANT: Removing a Terraform profile here will remove all of it's
+#            associated resources in AWS!
+
+# Name of the primary account.
+primary_account: CHANGEME
+
+# Configuration to apply in all accounts
+organization_root:
+
+  # Role assumed by Terraform for execution in each account
+  tf_execution_role: 'AWSControlTowerExecution'
+  region: 'eu-west-1'
+  # Bucket name used by example profile it will be prefixed with the target
+  # account number for uniqueness across accounts.
+  example_bucket_name: 'tfctl-example-bucket'
+  # Assign example-profile to all accounts in managed OUs
+  profiles:
+    - example-profile
+
+# Configuration to apply to accounts in Organization Units
+# Units not listed here will be ignored
+organization_units:
+  # Uncomment if you want to include account under the Core OU
+  # Core: {}
+  live: {}
+  test: {}
+  mgmt:
+    # Override the example bucket name in mgmt OU accounts
+    example_bucket_name: 'tfctl-ou-override-example'
+
+# Configuration to apply to individual accounts
+account_overrides:
+  test-example1:
+    # Override the bucket name in specific account
+    example_bucket_name: 'tfctl-account-override-example'
+
+# For security/compliance reasons you may want to exclude some accounts from
+# Terraform runs.
+exclude_accounts: []
+  # - Audit
+  # - 'Log Archive'

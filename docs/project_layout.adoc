@@ -1,0 +1,43 @@
+== Project layout
+
+Example project structure
+----
+project_dir/
+├── conf
+│   └── example.yaml
+├── modules
+│   └── s3-bucket
+│       ├── main.tf
+│       └── variables.tf
+└── profiles
+    └── example-profile
+        ├── data.tf
+        ├── main.tf
+        └── variables.tf
+----
+
+=== tfctl configuration file
+
+Assigns Terraform profiles and configuration to accounts based on:
+
+* Globally for all accounts
+* Account's organization unit
+* Individual accounts
+
+The configuration data is exposed to terraform via a profile `config` variable.
+
+It also defines Terraform and tfctl configuration such as state tracking and
+what IAM roles to use.
+
+=== profiles
+
+Profiles are re-usable collections of resources which can be applied to
+accounts.  They are implemented just like usual modules but provide an
+intermediate bridge between re-usable modules and tfctl configuration (and/or
+other data sources).  Profiles often compose multiple modules and provide
+configuration data to them.  This approach makes it possible to re-use standard
+modules (e.g. Terraform module registry).
+
+=== modules
+
+Standard Terraform modules.

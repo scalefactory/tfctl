@@ -1,0 +1,81 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Resources for managing Terraform state
+
+Parameters:
+
+  PrimaryAccountId:
+    Type: String
+    Description: "Primany account ID"
+  TerraformStateBucket:
+    Type: String
+    Description: "Name of S3 bucket used for storing Terraform state"
+  TerraformDynamoDbTable:
+    Type: String
+    Description: "Name of DynamoDB table used for Terraform state locking"
+    Default: "terraform-lock"
+
+Resources:
+
+  StateBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: Private
+      BucketName: !Ref TerraformStateBucket
+      VersioningConfiguration:
+        Status: Enabled
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: True
+        BlockPublicPolicy: True
+        IgnorePublicAcls: True
+        RestrictPublicBuckets: True
+
+  DynamoLockTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Ref TerraformDynamoDbTable
+      AttributeDefinitions:
+        - AttributeName: LockID
+          AttributeType: S
+      KeySchema:
+        - AttributeName: LockID
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+
+  TerraformStateRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: TerraformStateRole
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS:
+                - !Sub 'arn:aws:iam::${PrimaryAccountId}:root'
+            Action:
+              - sts:AssumeRole
+      Path: /
+      Policies:
+        - PolicyName: "terraform-state"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "s3:PutObject"
+                  - "s3:GetBucketPolicy"
+                  - "s3:GetObject"
+                  - "s3:ListBucket"
+                  - "dynamodb:PutItem"
+                  - "dynamodb:DeleteItem"
+                  - "dynamodb:GetItem"
+                Resource:
+                  - !GetAtt StateBucket.Arn
+                  - !Sub "${StateBucket.Arn}/*"
+                  - !GetAtt DynamoLockTable.Arn
