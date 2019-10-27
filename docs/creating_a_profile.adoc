@@ -79,7 +79,7 @@ Create `main.tf`:
 [source, tf]
 ----
 resource "aws_s3_bucket" "example" {
-  bucket = "tfctl-example-${local.current_account_conf["name"]}"
+  bucket = "tfctl-${local.current_account_conf["name"]}"
   acl    = "private"
 }
 ----
@@ -128,31 +128,31 @@ of changes for each account.
 
 .example terraform plan
 ----
-info: euwest1-test-live: Terraform will perform the following actions:
-info: euwest1-test-live:
-info: euwest1-test-live:   # module.example-profile.aws_s3_bucket.example will be created
-info: euwest1-test-live:   + resource "aws_s3_bucket" "example" {
-info: euwest1-test-live:       + acceleration_status         = (known after apply)
-info: euwest1-test-live:       + acl                         = "private"
-info: euwest1-test-live:       + arn                         = (known after apply)
-info: euwest1-test-live:       + bucket                      = "tfctl-example-euwest1-test-live"
-info: euwest1-test-live:       + bucket_domain_name          = (known after apply)
-info: euwest1-test-live:       + bucket_regional_domain_name = (known after apply)
-info: euwest1-test-live:       + force_destroy               = false
-info: euwest1-test-live:       + hosted_zone_id              = (known after apply)
-info: euwest1-test-live:       + id                          = (known after apply)
-info: euwest1-test-live:       + region                      = (known after apply)
-info: euwest1-test-live:       + request_payer               = (known after apply)
-info: euwest1-test-live:       + website_domain              = (known after apply)
-info: euwest1-test-live:       + website_endpoint            = (known after apply)
-info: euwest1-test-live:
-info: euwest1-test-live:       + versioning {
-info: euwest1-test-live:           + enabled    = (known after apply)
-info: euwest1-test-live:           + mfa_delete = (known after apply)
-info: euwest1-test-live:         }
-info: euwest1-test-live:     }
-info: euwest1-test-live:
-info: euwest1-test-live: Plan: 1 to add, 0 to change, 0 to destroy.
+info: test-example: Terraform will perform the following actions:
+info: test-example:
+info: test-example:   # module.example-profile.aws_s3_bucket.example will be created
+info: test-example:   + resource "aws_s3_bucket" "example" {
+info: test-example:       + acceleration_status         = (known after apply)
+info: test-example:       + acl                         = "private"
+info: test-example:       + arn                         = (known after apply)
+info: test-example:       + bucket                      = "tfctl-test-example"
+info: test-example:       + bucket_domain_name          = (known after apply)
+info: test-example:       + bucket_regional_domain_name = (known after apply)
+info: test-example:       + force_destroy               = false
+info: test-example:       + hosted_zone_id              = (known after apply)
+info: test-example:       + id                          = (known after apply)
+info: test-example:       + region                      = (known after apply)
+info: test-example:       + request_payer               = (known after apply)
+info: test-example:       + website_domain              = (known after apply)
+info: test-example:       + website_endpoint            = (known after apply)
+info: test-example:
+info: test-example:       + versioning {
+info: test-example:           + enabled    = (known after apply)
+info: test-example:           + mfa_delete = (known after apply)
+info: test-example:         }
+info: test-example:     }
+info: test-example:
+info: test-example: Plan: 1 to add, 0 to change, 0 to destroy.
 ----
 
 If there are errors in your profile, terraform will fail and usually indicate
