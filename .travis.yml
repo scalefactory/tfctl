@@ -1,0 +1,13 @@
+rvm:
+- 2.3
+- 2.6
+sudo: false
+script: make test
+deploy:
+  provider: rubygems
+  api_key:
+    secure: FKAONS7x6koN7oiEULr4ViwjlDBzbE0bCgqhXRP4DfTtlRyEymeqgrfSIqkVH7unjd0muIGrMBnFuaQVSx7648RS1Ss0QAJo32SVnzoYl1P03cijqNmbbaf1jRdA3IGmh0gV5vsXrmlHiP8gfAuC9PqQ550OzxzWUvEI8vXgSTibmKd/PoQinv5g/dq0gBFjlhSMt/k3Z9WlMmkEsAro/r/Ie2M7mItHPT65f0ga5q5SeujPQQ3Sd/l3mznh37bmnw5RZpFDYdA7jL2p0Y58XJPBU8soa3ZC5GeHyxCYVoGh6EDGAFb83ERRT6rQ7ywkOufTv1o497P7a/prSbvT6fzc+DcugXPEaglT+dUXMe36OoF907Xva4vq3xIHV2N/yrxbDM85hmMk22wEU+9wpDDzFNQnfsXNbaHG9F7gLgy0eoTRrSuJf6cPDlE8pwvn7b8cjieeqWc//ZNhSYnHYZGER4LFINWVxs68Eofmmqp2IESTcUpJ8oB4bV+bzzyobJMRobOXu2hvgCrTdr6r/PnckpAfZE/l4nVQa14f1FU//8bU3DwvNun6TX1Ujp+XNiRDUlvP2KnkBU4s5rsIkL3lCHW7r6GipSk6SOvGMTz5eySMsoWvZQBdAzk/OxcIteeWH9pdo1Hbu5x2/bwyuTRCQ9E79CKWDKlIQwCgUY0=
+  gem: tfctl
+  on:
+    tags: true
+    repo: scalefactory/tfctl
