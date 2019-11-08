@@ -39,18 +39,16 @@ other ways of managing accounts in AWS Organizations.
 
 == Installation
 
-Clone this repository and run:
+To install the latest release from RubyGems run:
+
+----
+gem install tfctl
+----
+
+Alternatively you can build and install from this repo with:
 
 ----
 make install
-----
-
-This will build a ruby gem and install it.
-
-When using bundler, add this to your `Gemfile`:
-
-----
-gem 'tfctl', git: 'https://github.com/scalefactory/tfctl'
 ----
 
 == Docs
