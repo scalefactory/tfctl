@@ -2,7 +2,7 @@
 
 == 0.0.2
 
-* BUGFIX: Fixed an exeption when `exclude_accounts` is not set.
+* BUGFIX: Fixed an exception when `exclude_accounts` is not set.
 
 == 0.0.1
 
