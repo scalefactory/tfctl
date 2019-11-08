@@ -2,6 +2,9 @@
 
 = tfctl
 
+image:https://travis-ci.org/scalefactory/tfctl.svg?branch=master["Build Status", link="https://travis-ci.org/scalefactory/tfctl"]
+image:https://badge.fury.io/rb/tfctl.svg["Gem Version", link="https://badge.fury.io/rb/tfctl"]
+
 == Overview
 
 Tfctl is a small Terraform wrapper for working with multi-account AWS
