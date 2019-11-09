@@ -50,7 +50,7 @@ organization_root:
 # Configuration to apply to accounts in Organization Units
 # Units not listed here will be ignored
 organization_units:
-  # Uncomment if you want to include accounts under the Core OU
+  # Uncomment if you want to include Core OU accounts
   # Core: {}
   live: {}
   test: {}
