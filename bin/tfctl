@@ -118,12 +118,8 @@ def run_account(config, account, options, tf_argv, log)
     # executed from.
     log.info "#{account[:name]}: Generating Terraform run directory"
     Tfctl::Generator.make(
-        account_id:     account[:id],
-        account_name:   account[:name],
-        config:         config,
-        execution_role: account[:tf_execution_role],
-        profiles:       account[:profiles],
-        region:         account[:region],
+        account: account,
+        config:  config,
     )
 
     log.info "#{account[:name]}: Executing Terraform #{tf_argv[0]}"

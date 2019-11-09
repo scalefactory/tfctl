@@ -15,15 +15,11 @@ module Tfctl
         end
 
         def make(
-            account_id:,
-            account_name:,
-            execution_role:,
-            profiles:,
+            account:,
             config:,
-            region:,
             tf_version: '>= 0.12.0',
             aws_provider_version: '~> 2.14',
-            target_dir: "#{PROJECT_ROOT}/.tfctl/#{config[:config_name]}/#{account_name}"
+            target_dir: "#{PROJECT_ROOT}/.tfctl/#{config[:config_name]}/#{account[:name]}"
         )
 
             FileUtils.mkdir_p target_dir
@@ -34,7 +30,7 @@ module Tfctl
                     'backend'          => {
                         's3' => {
                             'bucket'         => config[:tf_state_bucket],
-                            'key'            => "#{account_name}/tfstate",
+                            'key'            => "#{account[:name]}/tfstate",
                             'region'         => config[:tf_state_region],
                             'role_arn'       => config[:tf_state_role_arn],
                             'dynamodb_table' => config[:tf_state_dynamodb_table],
@@ -49,9 +45,9 @@ module Tfctl
                 'provider' => {
                     'aws' => {
                         'version'     => aws_provider_version,
-                        'region'      => region,
+                        'region'      => account[:region],
                         'assume_role' => {
-                            'role_arn' => "arn:aws:iam::#{account_id}:role/#{execution_role}",
+                            'role_arn' => "arn:aws:iam::#{account[:id]}:role/#{account[:tf_execution_role]}",
                         },
                     },
                 },
@@ -74,7 +70,7 @@ module Tfctl
 
             FileUtils.rm Dir.glob("#{target_dir}/profile_*.tf.json")
 
-            profiles.each do |profile|
+            account[:profiles].each do |profile|
                 profile_block = {
                     'module' => {
                         profile => {
