@@ -4,6 +4,7 @@
 
 * feat: configurable tf and provider versions
 * fix: use provider region from config file
+* fix: fail when terraform command is missing
 
 == 0.1.0
 
