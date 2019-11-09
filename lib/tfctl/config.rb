@@ -18,7 +18,7 @@ module Tfctl
                 @config = read_cache(cache_file)
             else
                 @config = load_config(config_name, yaml_config, aws_org_config)
-                write_cache(@config, cache_file)
+                write_cache(cache_file)
             end
         end
 
@@ -30,15 +30,17 @@ module Tfctl
             @config.each(&block)
         end
 
-        def has_key?(k)
-            @config.has_key?(k)
+        def key?(key)
+            @config.key?(key)
         end
+
+        alias has_key? key?
 
         def to_yaml
             @config.to_yaml
         end
 
-        def to_json
+        def to_json(*_args)
             @config.to_json
         end
 
@@ -52,8 +54,9 @@ module Tfctl
             end
 
             if output.empty?
-                raise Tfctl::Error.new "Account not found with #{property_name}: #{property_value}"
+                raise Tfctl::Error, "Account not found with #{property_name}: #{property_value}"
             end
+
             output
         end
 
@@ -65,13 +68,14 @@ module Tfctl
                         output << account
                     end
                 rescue RegexpError => e
-                    raise Tfctl::Error.new "Regexp: #{e}"
+                    raise Tfctl::Error, "Regexp: #{e}"
                 end
             end
 
             if output.empty?
-                raise Tfctl::Error.new "Account not found with #{property_name} matching regex: #{expr}"
+                raise Tfctl::Error, "Account not found with #{property_name} matching regex: #{expr}"
             end
+
             output
         end
 
@@ -96,14 +100,14 @@ module Tfctl
             config
         end
 
-        def write_cache(config, cache_file)
+        def write_cache(cache_file)
             FileUtils.mkdir_p File.dirname(cache_file)
-            File.open(cache_file, 'w') {|f| f.write self.to_yaml }
+            File.open(cache_file, 'w') { |f| f.write to_yaml }
         end
 
         def read_cache(cache_file)
             unless File.exist?(cache_file)
-                raise Tfctl::Error.new("Cached configuration not found in: #{cache_file}")
+                raise Tfctl::Error, "Cached configuration not found in: #{cache_file}"
             end
 
             YAML.load_file(cache_file)
@@ -111,16 +115,13 @@ module Tfctl
 
         # Sets :excluded property on any excluded accounts
         def mark_excluded_accounts(config)
-          return config unless config.has_key?(:exclude_accounts)
+            return config unless config.key?(:exclude_accounts)
 
-          config[:accounts].each_with_index do |account, idx|
-              if config[:exclude_accounts].include?(account[:name])
-                  config[:accounts][idx][:excluded] = true
-              else
-                  config[:accounts][idx][:excluded] = false
-              end
-          end
-          config
+            config[:accounts].each_with_index do |account, idx|
+                config[:accounts][idx][:excluded] = config[:exclude_accounts].include?(account[:name]) ? true : false
+            end
+
+            config
         end
 
         def remove_unset_profiles(config)
@@ -158,13 +159,13 @@ module Tfctl
                 # merge all OU levels settings
                 account_ou_parents.each_with_index do |_, i|
                     account_ou = account_ou_parents[0..i].join('/').to_sym
-                    if yaml_config[:organization_units].has_key?(account_ou)
+                    if yaml_config[:organization_units].key?(account_ou)
                         account_config = account_config.deep_merge(yaml_config[:organization_units][account_ou])
                     end
                 end
 
                 # merge any account overrides
-                if yaml_config[:account_overrides].has_key?(account_name)
+                if yaml_config[:account_overrides].key?(account_name)
                     account_config = account_config.deep_merge(yaml_config[:account_overrides][account_name])
                 end
 

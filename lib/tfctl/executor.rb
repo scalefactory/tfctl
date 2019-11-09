@@ -3,23 +3,18 @@
 require 'open3'
 require 'fileutils'
 require 'shellwords'
-require 'thread'
 require_relative 'error.rb'
 
 module Tfctl
     module Executor
-        extend self
+        module_function
 
         # Execute terraform command
         def run(account_name:, config_name:, log:, cmd: nil, argv: [], unbuffered: true)
 
             if cmd.nil?
-                if File.exists?("#{PROJECT_ROOT}/bin/terraform")
-                    # use embedded terraform binary
-                    cmd = "#{PROJECT_ROOT}/bin/terraform"
-                else
-                    cmd = 'terraform'
-                end
+                # use project terraform binary if available
+                cmd = File.exist?("#{PROJECT_ROOT}/bin/terraform") ? "#{PROJECT_ROOT}/bin/terraform" : 'terraform'
             end
 
             path       = "#{PROJECT_ROOT}/.tfctl/#{config_name}/#{account_name}"
@@ -57,14 +52,14 @@ module Tfctl
                 Thread.new do
                     stdout.each do |line|
                         semaphore.synchronize do
-                            unbuffered ? log.info("#{account_name}: #{line.chomp}") : output << [ 'info', line ]
+                            unbuffered ? log.info("#{account_name}: #{line.chomp}") : output << ['info', line]
                         end
                     end
                 end
                 Thread.new do
                     stderr.each do |line|
                         semaphore.synchronize do
-                            unbuffered ? log.error("#{account_name}: #{line.chomp}") : output << [ 'error', line ]
+                            unbuffered ? log.error("#{account_name}: #{line.chomp}") : output << ['error', line]
                         end
                     end
                 end
@@ -79,26 +74,23 @@ module Tfctl
                 FileUtils.cd cwd
                 FileUtils.rm_f plan_file if args[0] == 'apply' # tidy up the plan file
 
-                unless status.exitstatus == 0
-                    raise Tfctl::Error.new "#{cmd} failed with exit code: #{status.exitstatus}"
+                unless status.exitstatus.zero?
+                    raise Tfctl::Error, "#{cmd} failed with exit code: #{status.exitstatus}"
                 end
             end
         end
 
         # Adds plan file to `plan` and `apply` sub commands
         def plan_file_args(plan_file, subcmd)
-            output = []
-            if subcmd == 'plan'
-                output = [ "-out=#{plan_file}" ]
+            return ["-out=#{plan_file}"] if subcmd == 'plan'
 
-            elsif subcmd == 'apply'
-                if File.exists?(plan_file)
-                    output = [ "#{plan_file}" ]
-                else
-                    raise Tfctl::Error.new "Plan file not found in #{plan_file}.  Run plan first."
-                end
+            if subcmd == 'apply'
+                raise Tfctl::Error, "Plan file not found in #{plan_file}.  Run plan first." unless File.exist?(plan_file)
+
+                return [plan_file.to_s]
             end
-            output
+
+            return []
         end
     end
 end

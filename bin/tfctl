@@ -7,6 +7,7 @@ end
 require 'optparse'
 require 'fileutils'
 require 'parallel'
+require 'English'
 require_relative '../lib/tfctl'
 
 PROJECT_ROOT = Dir.pwd
@@ -15,43 +16,43 @@ PROJECT_ROOT = Dir.pwd
 # Process CLI arguments
 #
 
-options={
-    :account     => nil,
-    :ou          => nil,
-    :all         => nil,
-    :show_config => false,
-    :config_file => nil,
-    :unbuffered  => false,
-    :debug       => false,
-    :use_cache   => false
+options = {
+    account:     nil,
+    ou:          nil,
+    all:         nil,
+    show_config: false,
+    config_file: nil,
+    unbuffered:  false,
+    debug:       false,
+    use_cache:   false,
 }
 
 optparse = OptionParser.new do |opts|
-    opts.on('-a', '--account=name', "Target a specific AWS account") do |o|
+    opts.on('-a', '--account=name', 'Target a specific AWS account') do |o|
         options[:account] = o
     end
-    opts.on('-o', '--ou=organization_unit', "Target accounts in an Organization Unit (uses regex matching)") do |o|
+    opts.on('-o', '--ou=organization_unit', 'Target accounts in an Organization Unit (uses regex matching)') do |o|
         options[:ou] = o
     end
-    opts.on('--all', "Target all accounts") do
+    opts.on('--all', 'Target all accounts') do
         options[:all] = true
     end
-    opts.on('-c', '--config-file=config', "Path to config file") do |o|
+    opts.on('-c', '--config-file=config', 'Path to config file') do |o|
         options[:config_file] = o
     end
-    opts.on('-s', '--show-config', "Display configuration") do
+    opts.on('-s', '--show-config', 'Display configuration') do
         options[:show_config] = true
     end
-    opts.on('-x', '--use-cache', "Use cached AWS organization data") do
+    opts.on('-x', '--use-cache', 'Use cached AWS organization data') do
         options[:use_cache] = true
     end
-    opts.on('-u', '--unbuffered', "Disable buffering of Terraform output") do
+    opts.on('-u', '--unbuffered', 'Disable buffering of Terraform output') do
         options[:unbuffered] = true
     end
-    opts.on('-d', '--debug', "Turn on debug messages") do
+    opts.on('-d', '--debug', 'Turn on debug messages') do
         options[:debug] = true
     end
-    opts.on('-v', '--version', "Show version") do
+    opts.on('-v', '--version', 'Show version') do
         puts Tfctl::VERSION
         exit
     end
@@ -67,34 +68,33 @@ begin
         raise OptionParser::MissingArgument, '--config-file'
     end
 
-    unless File.exists? options[:config_file]
+    unless File.exist? options[:config_file]
         raise OptionParser::InvalidOption,
-          "Config file not found in: #{options[:config_file]}"
+              "Config file not found in: #{options[:config_file]}"
     end
 
-    unless File.exists? options[:config_file]
-      raise OptionParser::InvalidOption, "Config file #{options[:config_file]} not found."
+    unless File.exist? options[:config_file]
+        raise OptionParser::InvalidOption, "Config file #{options[:config_file]} not found."
     end
 
     # Validate targets
-    targetting_opts = [:account, :ou, :all]
+    targetting_opts = %i[account ou all]
     targets_set = []
-    options.each do |k,v|
+    options.each do |k, v|
         if targetting_opts.include?(k)
-            targets_set << k.to_s unless v == nil
+            targets_set << k.to_s unless v.nil?
         end
     end
     if targets_set.length > 1
         raise OptionParser::InvalidOption,
-            "Too many target options set: #{targets_set.join(', ')}.  Only one can be specified."
+              "Too many target options set: #{targets_set.join(', ')}.  Only one can be specified."
     end
     if targets_set.empty? and options[:show_config] == false
-        raise OptionParser::InvalidOption, "Please specify target"
+        raise OptionParser::InvalidOption, 'Please specify target'
     end
-
 rescue OptionParser::InvalidOption, OptionParser::MissingArgument
-    $stderr.puts $!.to_s
-    $stderr.puts optparse
+    warn $ERROR_INFO.to_s
+    warn optparse
     exit 2
 end
 
@@ -114,12 +114,11 @@ def run_account(config, account, options, tf_argv, log)
     # executed from.
     log.info "#{account[:name]}: Generating Terraform run directory"
     Tfctl::Generator.make(
-        config:            config,
-        terraform_io_org:  config[:terraform_io_org],
-        account_id:        account[:id],
-        account_name:      account[:name],
-        profiles:          account[:profiles],
-        execution_role:    account[:tf_execution_role]
+        config:         config,
+        account_id:     account[:id],
+        account_name:   account[:name],
+        profiles:       account[:profiles],
+        execution_role: account[:tf_execution_role],
     )
 
     log.info "#{account[:name]}: Executing Terraform #{tf_argv[0]}"
@@ -128,7 +127,7 @@ def run_account(config, account, options, tf_argv, log)
         config_name:  config[:config_name],
         unbuffered:   options[:unbuffered],
         log:          log,
-        argv:         tf_argv
+        argv:         tf_argv,
     )
 end
 
@@ -138,9 +137,8 @@ end
 #
 
 begin
-
     # Set up logging
-    options[:debug] ? log_level = Logger::DEBUG : log_level = Logger::INFO
+    log_level = options[:debug] ? Logger::DEBUG : Logger::INFO
     log = Tfctl::Logger.new(log_level)
 
     log.info 'tfctl running'
@@ -150,7 +148,7 @@ begin
 
     log.info 'Working out AWS account topology'
 
-    yaml_config = YAML.load(File.read(options[:config_file]))
+    yaml_config = YAML.safe_load(File.read(options[:config_file]))
     yaml_config.symbolize_names!
 
     org_units = yaml_config[:organization_units].keys
@@ -159,11 +157,11 @@ begin
     log.info 'Merging configuration'
 
     config = Tfctl::Config.new(
-                config_name:    config_name,
-                yaml_config:    yaml_config,
-                aws_org_config: aws_org_accounts,
-                use_cache:      options[:use_cache])
-
+        config_name:    config_name,
+        yaml_config:    yaml_config,
+        aws_org_config: aws_org_accounts,
+        use_cache:      options[:use_cache],
+    )
 
     if options[:show_config]
         puts config.to_yaml
@@ -189,9 +187,7 @@ begin
         end
     end
 
-
     log.info 'Done'
-
 rescue Tfctl::Error => e
     log.error(e)
     exit 1

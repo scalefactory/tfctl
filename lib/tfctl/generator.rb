@@ -2,11 +2,11 @@
 
 require 'fileutils'
 
-# Generates Terraform configuration for an account.
+# Generates top level Terraform configuration for an account.
 
 module Tfctl
     module Generator
-        extend self
+        module_function
 
         def write_json_block(path, block)
             File.open(path, 'w') do |f|
@@ -15,7 +15,6 @@ module Tfctl
         end
 
         def make(
-            terraform_io_org:,
             account_id:,
             account_name:,
             execution_role:,
@@ -32,7 +31,7 @@ module Tfctl
             terraform_block = {
                 'terraform' => {
                     'required_version' => tf_version,
-                    'backend' => {
+                    'backend'          => {
                         's3' => {
                             'bucket'         => config[:tf_state_bucket],
                             'key'            => "#{account_name}/tfstate",
@@ -40,31 +39,31 @@ module Tfctl
                             'role_arn'       => config[:tf_state_role_arn],
                             'dynamodb_table' => config[:tf_state_dynamodb_table],
                             'encrypt'        => 'true',
-                        }
-                    }
-                }
+                        },
+                    },
+                },
             }
             write_json_block("#{target_dir}/terraform.tf.json", terraform_block)
 
             provider_block = {
                 'provider' => {
-                    'aws'  => {
+                    'aws' => {
                         'version'     => aws_provider_version,
                         'region'      => region,
                         'assume_role' => {
-                            'role_arn' => "arn:aws:iam::#{account_id}:role/#{execution_role}"
-                        }
-                    }
-                }
+                            'role_arn' => "arn:aws:iam::#{account_id}:role/#{execution_role}",
+                        },
+                    },
+                },
             }
             write_json_block("#{target_dir}/provider.tf.json", provider_block)
 
             vars_block = {
                 'variable' => {
                     'config' => {
-                        'type' => 'string'
-                    }
-                }
+                        'type' => 'string',
+                    },
+                },
             }
             write_json_block("#{target_dir}/vars.tf.json", vars_block)
 
@@ -79,13 +78,13 @@ module Tfctl
                 profile_block = {
                     'module' => {
                         profile => {
-                            'source' => "../../../profiles/#{profile}",
-                            'config' => '${var.config}',
+                            'source'    => "../../../profiles/#{profile}",
+                            'config'    => '${var.config}',
                             'providers' => {
-                              'aws' => 'aws'
-                            }
-                        }
-                    }
+                                'aws' => 'aws',
+                            },
+                        },
+                    },
                 }
 
                 write_json_block("#{target_dir}/profile_#{profile}.tf.json", profile_block)

@@ -1,20 +1,26 @@
+# frozen_string_literal: true
+
 require_relative '../lib/tfctl/config.rb'
 
 RSpec.describe Tfctl::Config do
     # test data
     def yaml_config
-        YAML.load(File.read("#{PROJECT_ROOT}/spec/data/config.yaml")).symbolize_names!
-    end
-    def aws_org_config
-        YAML.load(File.read("#{PROJECT_ROOT}/spec/data/aws_org.yaml"))
+        YAML.safe_load(File.read("#{PROJECT_ROOT}/spec/data/config.yaml")).symbolize_names!
     end
 
-    subject(:config) {
+    def aws_org_config
+        # rubocop:disable Security/YAMLLoad
+        YAML.load(File.read("#{PROJECT_ROOT}/spec/data/aws_org.yaml"))
+        # rubocop:enable Security/YAMLLoad
+    end
+
+    subject(:config) do
         Tfctl::Config.new(
-          config_name:    'test',
-          yaml_config:    yaml_config,
-          aws_org_config: aws_org_config )
-    }
+            config_name:    'test',
+            yaml_config:    yaml_config,
+            aws_org_config: aws_org_config,
+        )
+    end
 
     it 'should set config name' do
         expect(config[:config_name]).to eq('test')
@@ -38,8 +44,9 @@ RSpec.describe Tfctl::Config do
         root_params = yaml_config[:organization_root]
 
         config[:accounts].each do |account|
-            root_params.each do |k,v|
+            root_params.each do |k, v|
                 next if k == :root_param # overriden on some levels
+
                 if k == :profiles
                     root_params[:profiles].each do |profile|
                         expect(account[:profiles]).to include(profile)
@@ -58,8 +65,8 @@ RSpec.describe Tfctl::Config do
     end
 
     it 'should add profiles from all hierarchy levels to accounts' do
-        root_profiles = [ 'global' ]
-        team_profiles = [ 'team-shared' ]
+        root_profiles = ['global']
+        team_profiles = ['team-shared']
         team_live_profiles = root_profiles + team_profiles + ['team-live']
         team_test_profiles = root_profiles + team_profiles + ['team-test']
         team_live_1_profiles = team_live_profiles + ['team-live-1']
@@ -135,7 +142,7 @@ RSpec.describe Tfctl::Config do
 
     it 'should flag excluded accounts' do
         config[:accounts].each do |account|
-            if ['primary', 'security', 'log-archive'].include?(account[:name])
+            if %w[primary security log-archive].include?(account[:name])
                 expect(account[:excluded]).to eq(true)
             else
                 expect(account[:excluded]).to eq(false)
