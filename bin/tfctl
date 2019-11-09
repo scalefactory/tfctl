@@ -8,6 +8,7 @@ require 'optparse'
 require 'fileutils'
 require 'parallel'
 require 'English'
+require 'terminal-table'
 require_relative '../lib/tfctl'
 
 PROJECT_ROOT = Dir.pwd
@@ -42,6 +43,9 @@ optparse = OptionParser.new do |opts|
     end
     opts.on('-s', '--show-config', 'Display configuration') do
         options[:show_config] = true
+    end
+    opts.on('-l', '--list-accounts', 'List discovered accounts') do
+        options[:list_accounts] = true
     end
     opts.on('-x', '--use-cache', 'Use cached AWS organization data') do
         options[:use_cache] = true
@@ -168,23 +172,43 @@ begin
         exit 0
     end
 
-    # Run targets
+    # Find target accounts
 
     if options[:account]
-        account = config.find_accounts(:name, options[:account]).first
-        run_account(config, account, options, ARGV, log)
-
+        accounts = config.find_accounts(:name, options[:account])
     elsif options[:ou]
         accounts = config.find_accounts_regex(:ou_path, options[:ou])
-        Parallel.each(accounts, in_processes: 8) do |ac|
-            run_account(config, ac, options, ARGV, log)
-        end
-
     elsif options[:all]
         accounts = config[:accounts]
-        Parallel.each(accounts, in_processes: 8) do |ac|
-            run_account(config, ac, options, ARGV, log)
+    else
+        raise Tfctl::Error, 'Missing target'
+    end
+
+    # List target accounts
+
+    if options[:list_accounts]
+        log.info "Listing accounts\n"
+        table = Terminal::Table.new do |t|
+            t.style = {
+                border_x:     '',
+                border_y:     '',
+                border_i:     '',
+                padding_left: 0,
+            }
+            t << %w[ACCOUNT_ID OU NAME]
+            accounts.each do |account|
+                t << [account[:id], account[:ou_path], account[:name]]
+            end
         end
+
+        puts table
+        exit 0
+    end
+
+    # Execute Terraform in target accounts
+
+    Parallel.each(accounts, in_processes: 8) do |ac|
+        run_account(config, ac, options, ARGV, log)
     end
 
     log.info 'Done'

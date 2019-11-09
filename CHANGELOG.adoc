@@ -1,5 +1,9 @@
 = Changelog
 
+== unreleased
+
+* FEATURE: Added `-l` switch to list discovered accounts.
+
 == 0.0.2
 
 * BUGFIX: Fixed an exception when `exclude_accounts` is not set.
