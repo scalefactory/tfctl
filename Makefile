@@ -1,10 +1,16 @@
-.PHONY: clean install test
+.PHONY: clean install test rubocop spec
 
 vendor:
 	$(info => Installing Ruby dependencies)
 	@bundle install --path vendor --with developement --binstubs=vendor/bin
 
-test: vendor
+test: vendor rubocop spec
+
+rubocop:
+	$(info => Running rubocop)
+	@vendor/bin/rubocop
+
+spec:
 	$(info => Running spec tests)
 	@vendor/bin/rspec
 
