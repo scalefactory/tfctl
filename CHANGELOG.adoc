@@ -1,12 +1,16 @@
 = Changelog
 
+== unreleased
+
+* fix: use provider region from config file
+
 == 0.1.0
 
-* FEATURE: Added `-l` switch to list discovered accounts.
+* feat: Added `-l` switch to list discovered accounts.
 
 == 0.0.2
 
-* BUGFIX: Fixed an exception when `exclude_accounts` is not set.
+* fix: Fixed an exception when `exclude_accounts` is not set.
 
 == 0.0.1
 
