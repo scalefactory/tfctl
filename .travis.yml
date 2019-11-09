@@ -1,17 +1,16 @@
 rvm:
-- 2.3
-- 2.6
+  - 2.3
+  - 2.6
 sudo: false
 script: make test
-deploy:
-  provider: rubygems
-  api_key:
-    secure: FKAONS7x6koN7oiEULr4ViwjlDBzbE0bCgqhXRP4DfTtlRyEymeqgrfSIqkVH7unjd0muIGrMBnFuaQVSx7648RS1Ss0QAJo32SVnzoYl1P03cijqNmbbaf1jRdA3IGmh0gV5vsXrmlHiP8gfAuC9PqQ550OzxzWUvEI8vXgSTibmKd/PoQinv5g/dq0gBFjlhSMt/k3Z9WlMmkEsAro/r/Ie2M7mItHPT65f0ga5q5SeujPQQ3Sd/l3mznh37bmnw5RZpFDYdA7jL2p0Y58XJPBU8soa3ZC5GeHyxCYVoGh6EDGAFb83ERRT6rQ7ywkOufTv1o497P7a/prSbvT6fzc+DcugXPEaglT+dUXMe36OoF907Xva4vq3xIHV2N/yrxbDM85hmMk22wEU+9wpDDzFNQnfsXNbaHG9F7gLgy0eoTRrSuJf6cPDlE8pwvn7b8cjieeqWc//ZNhSYnHYZGER4LFINWVxs68Eofmmqp2IESTcUpJ8oB4bV+bzzyobJMRobOXu2hvgCrTdr6r/PnckpAfZE/l4nVQa14f1FU//8bU3DwvNun6TX1Ujp+XNiRDUlvP2KnkBU4s5rsIkL3lCHW7r6GipSk6SOvGMTz5eySMsoWvZQBdAzk/OxcIteeWH9pdo1Hbu5x2/bwyuTRCQ9E79CKWDKlIQwCgUY0=
-  gem: tfctl
-  on:
-    tags: true
-    repo: scalefactory/tfctl
-notifications:
-  slack:
-    rooms:
-      secure: HrdsUaTCvwtq5rLyAf7Uwo76p9JhxnoFvoZU/AtxTCL6lwMm5pqpfDAdbBH8C2BYMWRyiS8IfSrvuLbGUr317qJgVCmnhD7JIgdA0Aih4GkR0yK+EVao7qdOClO2CGJFJGqHveBBpXy94FEwgFwQSvnuSZdY8gNdXafvpgrPvcbWHIF9Bq7StfYelWZX6+FL7xczqVhdetXcHJEj6Q/thkbvyn0hJAVegjDq4Pw3MyR66Mv5HTj+jYbGrJOR1poNW8vv4iQjK0TIMvCCeTv4Ddrjitn1kOK1BPYqoHEkaRwXdS7+hevv+UfV074awTp3UOIS5VP3ve/KX21xcl9DWMG7Gde9tuyap9WKhN3XE5686qrfn4M/L7PmVnzeYimUKLQfdqjDXa7UI3orGIOq8nKCsCUFvFUQZ/DxeEssJzBNNRbeGywwVtXk7/8L2HHiQJ3t/29vMLEq6EwskYK3Uao2aIVWpLSkPwOuwVxrNWXrwojrrKo+oo8QvW6xkov5UW3VkapyzRyDN2oIpNkFeLYfuyTO4MBsnLzCBqJYEeku2l0Hp9WBq2Q1a+FRgqQlcRbLPsYwK5AdkRKcWuXP8FMZoqXX6F9B73q5Dbub2et4YN4zhvroLZN6MmlneM6faJh9aS4yV2ZlU1XbOtbqP0nkHrJ+o8DeM/wgTB1GB90=
+jobs:
+  - stage: Gem release
+    rvm: 2.6
+    deploy:
+      provider: rubygems
+      api_key:
+        secure: FKAONS7x6koN7oiEULr4ViwjlDBzbE0bCgqhXRP4DfTtlRyEymeqgrfSIqkVH7unjd0muIGrMBnFuaQVSx7648RS1Ss0QAJo32SVnzoYl1P03cijqNmbbaf1jRdA3IGmh0gV5vsXrmlHiP8gfAuC9PqQ550OzxzWUvEI8vXgSTibmKd/PoQinv5g/dq0gBFjlhSMt/k3Z9WlMmkEsAro/r/Ie2M7mItHPT65f0ga5q5SeujPQQ3Sd/l3mznh37bmnw5RZpFDYdA7jL2p0Y58XJPBU8soa3ZC5GeHyxCYVoGh6EDGAFb83ERRT6rQ7ywkOufTv1o497P7a/prSbvT6fzc+DcugXPEaglT+dUXMe36OoF907Xva4vq3xIHV2N/yrxbDM85hmMk22wEU+9wpDDzFNQnfsXNbaHG9F7gLgy0eoTRrSuJf6cPDlE8pwvn7b8cjieeqWc//ZNhSYnHYZGER4LFINWVxs68Eofmmqp2IESTcUpJ8oB4bV+bzzyobJMRobOXu2hvgCrTdr6r/PnckpAfZE/l4nVQa14f1FU//8bU3DwvNun6TX1Ujp+XNiRDUlvP2KnkBU4s5rsIkL3lCHW7r6GipSk6SOvGMTz5eySMsoWvZQBdAzk/OxcIteeWH9pdo1Hbu5x2/bwyuTRCQ9E79CKWDKlIQwCgUY0=
+      gem: tfctl
+      on:
+        tags: true
+        repo: scalefactory/tfctl
