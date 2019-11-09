@@ -2,6 +2,7 @@
 
 == unreleased
 
+* feat: configurable tf and provider versions
 * fix: use provider region from config file
 
 == 0.1.0

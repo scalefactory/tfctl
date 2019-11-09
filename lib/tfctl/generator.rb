@@ -14,13 +14,10 @@ module Tfctl
             end
         end
 
-        def make(
-            account:,
-            config:,
-            tf_version: '>= 0.12.0',
-            aws_provider_version: '~> 2.14',
-            target_dir: "#{PROJECT_ROOT}/.tfctl/#{config[:config_name]}/#{account[:name]}"
-        )
+        def make(account:, config:)
+            target_dir = "#{PROJECT_ROOT}/.tfctl/#{config[:config_name]}/#{account[:name]}"
+            tf_version = config.fetch(:tf_required_version, '>= 0.12.0')
+            aws_provider_version = config.fetch(:aws_provider_version, '>= 2.14')
 
             FileUtils.mkdir_p target_dir
 
