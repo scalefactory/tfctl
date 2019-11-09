@@ -29,7 +29,7 @@ Gem::Specification.new do |spec|
     spec.add_dependency 'parallel',              '~> 1.17'
     spec.add_dependency 'terminal-table',        '~> 1.8'
 
-    spec.add_development_dependency 'rspec', '~> 3.8'
-    spec.add_development_dependency 'rubocop', '~> 0.76'
     spec.add_development_dependency 'guard-rspec', '~> 4.7'
+    spec.add_development_dependency 'rspec',       '~> 3.8'
+    spec.add_development_dependency 'rubocop',     '~> 0.76'
 end
