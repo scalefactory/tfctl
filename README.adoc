@@ -98,7 +98,16 @@ Show merged configuration:
 tfctl -c conf/example.yaml -s
 ----
 
-Run Terraform init accross all accounts:
+List all discovered accounts:
+
+----
+tfctl -c conf/example.yaml --all -l
+----
+
+TIP: This can be narrowed down using targeting options and is a good way to
+test what accounts match.
+
+Run Terraform init across all accounts:
 
 ----
 tfctl -c conf/example.yaml --all -- init

@@ -23,8 +23,11 @@ Gem::Specification.new do |spec|
     spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
     spec.require_paths = ['lib']
 
+    # Think when adding new dependencies.  Is it really necessary?
+    # "The things you own end up owning you" etc.
     spec.add_dependency 'aws-sdk-organizations', '~> 1.13'
     spec.add_dependency 'parallel',              '~> 1.17'
+    spec.add_dependency 'terminal-table',        '~> 1.8'
 
     spec.add_development_dependency 'rspec', '~> 3.8'
     spec.add_development_dependency 'rubocop', '~> 0.76'
