@@ -1,10 +1,14 @@
-.PHONY: clean install test rubocop spec
+.PHONY: clean install test rubocop spec guard
 
 vendor:
 	$(info => Installing Ruby dependencies)
 	@bundle install --path vendor --with developement --binstubs=vendor/bin
 
 test: vendor rubocop spec
+
+guard: vendor
+	$(info => Starting guard)
+	@bundle exec guard
 
 rubocop:
 	$(info => Running rubocop)
