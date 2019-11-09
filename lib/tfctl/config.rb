@@ -26,6 +26,10 @@ module Tfctl
             @config[key]
         end
 
+        def fetch(key, default)
+            @config.fetch(key, default)
+        end
+
         def each(&block)
             @config.each(&block)
         end
