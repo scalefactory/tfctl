@@ -9,7 +9,9 @@ RSpec.describe Tfctl::Config do
     end
 
     def aws_org_config
-        YAML.safe_load(File.read("#{PROJECT_ROOT}/spec/data/aws_org.yaml"), permitted_classes: [Symbol])
+        # rubocop:disable Security/YAMLLoad
+        YAML.load(File.read("#{PROJECT_ROOT}/spec/data/aws_org.yaml"))
+        # rubocop:enable Security/YAMLLoad
     end
 
     subject(:config) do
