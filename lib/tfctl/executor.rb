@@ -12,9 +12,16 @@ module Tfctl
         # Execute terraform command
         def run(account_name:, config_name:, log:, cmd: nil, argv: [], unbuffered: true)
 
+            # Use bin/terraform from a project dir if available
+            # Otherwise rely on PATH.
             if cmd.nil?
-                # use project terraform binary if available
                 cmd = File.exist?("#{PROJECT_ROOT}/bin/terraform") ? "#{PROJECT_ROOT}/bin/terraform" : 'terraform'
+            end
+
+            # Fail if there are no arguments for terraform and show terraform -help
+            if argv.empty?
+                help = `#{cmd} -help`.lines.to_a[1..-1].join
+                raise Tfctl::Error, "Missing terraform command.\n #{help}"
             end
 
             path       = "#{PROJECT_ROOT}/.tfctl/#{config_name}/#{account_name}"
