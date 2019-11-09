@@ -20,7 +20,7 @@ module Tfctl
             execution_role:,
             profiles:,
             config:,
-            region: 'eu-west-1',
+            region:,
             tf_version: '>= 0.12.0',
             aws_provider_version: '~> 2.14',
             target_dir: "#{PROJECT_ROOT}/.tfctl/#{config[:config_name]}/#{account_name}"
