@@ -10,7 +10,7 @@ module Tfctl
 
             self.level = log_level
 
-            @outlog.formatter = proc do |severity, datetime, progname, msg|
+            @outlog.formatter = proc do |severity, _datetime, _progname, msg|
                 # "#{datetime.iso8601} #{severity.downcase}: #{msg}\n"
                 "#{severity.downcase}: #{msg}\n"
             end
@@ -24,11 +24,25 @@ module Tfctl
             @outlog.level
         end
 
-        def debug(msg); log(:debug, msg); end
-        def info(msg); log(:info, msg); end
-        def warn(msg); log(:warn, msg); end
-        def error(msg); log(:error, msg); end
-        def fatal(msg); log(:fatal, msg); end
+        def debug(msg)
+            log(:debug, msg)
+        end
+
+        def info(msg)
+            log(:info, msg)
+        end
+
+        def warn(msg)
+            log(:warn, msg)
+        end
+
+        def error(msg)
+            log(:error, msg)
+        end
+
+        def fatal(msg)
+            log(:fatal, msg)
+        end
 
         def log(level, msg)
             @outlog.send(level, msg)

@@ -1,0 +1,79 @@
+---
+AllCops:
+  TargetRubyVersion: 2.3
+  DisplayCopNames: true
+
+Layout/IndentationWidth:
+  Width: 4
+
+Layout/IndentHeredoc:
+  Enabled: false
+
+Layout/EmptyLines:
+  Enabled: false
+
+Layout/EmptyLinesAroundMethodBody:
+  Enabled: false
+
+Layout/AlignHash:
+  EnforcedHashRocketStyle:
+    - table
+  EnforcedColonStyle:
+    - table
+
+Layout/SpaceAroundOperators:
+  Enabled: false
+
+Layout/ExtraSpacing:
+  Enabled: false
+
+Layout/EmptyLinesAroundBlockBody:
+  Enabled: false
+
+Layout/EmptyLinesAroundClassBody:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/LineLength:
+  Max: 140
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/ParameterLists:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+Style/AndOr:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/TrailingCommaInArguments:
+    EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInArrayLiteral:
+    EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInHashLiteral:
+    EnforcedStyleForMultiline: comma
+
+Style/RedundantReturn:
+  Enabled: false
