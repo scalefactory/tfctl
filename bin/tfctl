@@ -150,6 +150,7 @@ begin
     log.info 'Working out AWS account topology'
 
     yaml_config = YAML.safe_load(File.read(options[:config_file]))
+    Tfctl::Schema.validate(yaml_config)
     yaml_config.symbolize_names!
 
     org_units = yaml_config[:organization_units].keys
@@ -212,4 +213,11 @@ begin
 rescue Tfctl::Error => e
     log.error(e)
     exit 1
+rescue Tfctl::ValidationError => e
+    log.error(e)
+    e.issues.each do |issue|
+        log.error("Parameter: #{issue[:data_pointer]}") unless issue[:data_pointer] == ''
+        log.error(issue[:details]) unless issue[:details].nil?
+    end
+    exit 2
 end
