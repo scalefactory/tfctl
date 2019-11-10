@@ -22,6 +22,8 @@ endif::[]
 
 toc::[]
 
+== Overview
+
 Tfctl retrieves initial account configuration from AWS Organizations and merges
 it with configuration specified in a yaml file.
 
