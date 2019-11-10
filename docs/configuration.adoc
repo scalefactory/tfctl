@@ -1,7 +1,7 @@
 == Configuration
 
 Tfctl retrieves initial account configuration from AWS Organizations and merges
-it with organization config specified in the yaml file.
+it with configuration specified in a yaml file.
 
 The configuration is merged in the following order:
 
@@ -15,13 +15,16 @@ Parameters further down the hierarchy take precedence.  For example:
 [source, yaml]
 ----
 organization_root:
-  example_param: 'will be overriden further down'
+  data:
+    example_param: 'will be overriden further down'
 
 organization_units:
   team:
-    example_param: 'will win in team ou'
+    data:
+      example_param: 'will win in team ou'
   team/live:
-    example_param: 'will win in team/live ou'
+    data:
+      example_param: 'will win in team/live ou'
 ----
 
 One exception to this rule is the `profiles` parameter.  Profiles are additive:
@@ -44,6 +47,15 @@ This will result in all three profiles deployed to accounts in `team` OU.
 TIP: You can display the fully merged configuration by running `tfctl -c
 conf/CONFIG_FILE.yaml -s`.  It's safe to run as it doesn't make any changes to
 AWS resources.  It's a good way to test your configuration.
+
+=== Defining arbitrary data
+
+You can define arbitrary data under the `data:` parameter, both in the root of
+the config and in the organization sections.  It will be available in Terraform
+profiles to use by your modules.  You can use this to define things like VPC
+subnet ranges, s3 bucket names and so on.  `data:` in organization sections
+will be merged with accounts following the usual merge order as described
+above.
 
 === Handling secrets
 

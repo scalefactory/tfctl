@@ -22,11 +22,11 @@ RSpec.describe Tfctl::Config do
         )
     end
 
-    it 'should set config name' do
+    it 'sets config name' do
         expect(config[:config_name]).to eq('test')
     end
 
-    it 'should contain root parameters' do
+    it 'contains root parameters' do
         yaml = yaml_config
 
         # remove merged parameters
@@ -40,12 +40,12 @@ RSpec.describe Tfctl::Config do
         end
     end
 
-    it 'should merge organization root parameters with all accounts' do
+    it 'merges organization root parameters with all accounts' do
         root_params = yaml_config[:organization_root]
 
         config[:accounts].each do |account|
             root_params.each do |k, v|
-                next if k == :root_param # overriden on some levels
+                next if k == :data # overriden on some levels
 
                 if k == :profiles
                     root_params[:profiles].each do |profile|
@@ -58,13 +58,13 @@ RSpec.describe Tfctl::Config do
         end
     end
 
-    it 'should not add account parameters to root config' do
+    it 'excludes account parameters from root config' do
         expect(config).not_to have_key(:organization_root)
         expect(config).not_to have_key(:organization_units)
         expect(config).not_to have_key(:account_overrides)
     end
 
-    it 'should add profiles from all hierarchy levels to accounts' do
+    it 'adds profiles from all hierarchy levels to accounts' do
         root_profiles = ['global']
         team_profiles = ['team-shared']
         team_live_profiles = root_profiles + team_profiles + ['team-live']
@@ -90,38 +90,38 @@ RSpec.describe Tfctl::Config do
         end
     end
 
-    it 'should override parameters set lower in the hierarchy' do
+    it 'overrides parameters set lower in the hierarchy' do
         config[:accounts].each do |account|
             if account[:ou_path] == 'core'
-                expect(account[:root_param]).to eq('root')
-                expect(account).not_to have_key(:team_param)
+                expect(account[:data][:root_param]).to eq('root')
+                expect(account[:data]).not_to have_key(:team_param)
             end
             if account[:ou_path] == 'team/test'
-                expect(account[:team_param]).to eq('ou_override')
-                expect(account[:root_param]).to eq('ou_override')
+                expect(account[:data][:team_param]).to eq('ou_override')
+                expect(account[:data][:root_param]).to eq('ou_override')
             end
             if account[:name] == 'team-live-1'
-                expect(account[:root_param]).to eq('account_override')
-                expect(account[:team_param]).to eq('account_override')
+                expect(account[:data][:root_param]).to eq('account_override')
+                expect(account[:data][:team_param]).to eq('account_override')
             end
             if account[:name] == 'team-live-2'
-                expect(account[:root_param]).to eq('root')
-                expect(account[:team_param]).to eq('shared')
+                expect(account[:data][:root_param]).to eq('root')
+                expect(account[:data][:team_param]).to eq('shared')
             end
         end
     end
 
-    it 'should merge account specific parameters' do
+    it 'merges account specific parameters' do
         config[:accounts].each do |account|
             if account[:name] == 'team-live-1'
-                expect(account[:account_param]).to eq('account')
+                expect(account[:data][:account_param]).to eq('account')
             else
-                expect(account).not_to have_key(:account_param)
+                expect(account[:data]).not_to have_key(:account_param)
             end
         end
     end
 
-    it 'should find accounts by parameter name and value' do
+    it 'finds accounts by parameter name and value' do
         accounts = config.find_accounts(:name, 'team-live-1')
         expect(accounts[0][:name]).to eq('team-live-1')
         accounts = config.find_accounts(:ou_path, 'team/test')
@@ -130,7 +130,7 @@ RSpec.describe Tfctl::Config do
         expect(accounts[0][:name]).to eq('team-test-1')
     end
 
-    it 'should find accounts by parameter name and regex value' do
+    it 'finds accounts by parameter name and regex value' do
         accounts = config.find_accounts_regex(:ou_path, '.*/test')
         expect(accounts.length).to eq(2)
         accounts.each do |account|
@@ -140,7 +140,7 @@ RSpec.describe Tfctl::Config do
         end
     end
 
-    it 'should flag excluded accounts' do
+    it 'flags excluded accounts' do
         config[:accounts].each do |account|
             if %w[primary security log-archive].include?(account[:name])
                 expect(account[:excluded]).to eq(true)

@@ -12,8 +12,6 @@
 # Terraform configuration
 #
 
-# State management
-
 tf_state_bucket: 'CHANGEME'
 tf_state_dynamodb_table: 'terraform-lock'
 tf_state_region: 'eu-west-1'
@@ -26,47 +24,57 @@ aws_provider_version: '>= 2.14'
 tfctl_role_arn: 'arn:aws:iam::PRIMARY_ACCOUNT_ID:role/TfctlRole'
 
 #
+# Data
+#
+# Here you can add arbitrary data which will be accessible from Terraform
+# profiles.  Data can also be defined per account in the organization sections
+# below.
+#
+# data:
+#   my_parameter: some_value
+
+#
 # Organization configuration
 #
-
+# Assign resources and data to accounts based on the organization structure.
+#
 # IMPORTANT: Removing a Terraform profile here will remove all of it's
-#            associated resources in AWS!
+#            associated resources during next apply!
 
-# Name of the primary account.
-primary_account: CHANGEME
-
-# Configuration to apply in all accounts
+# Configuration to apply to all accounts
 organization_root:
-
   # Role assumed by Terraform for execution in each account
   tf_execution_role: 'AWSControlTowerExecution'
   region: 'eu-west-1'
-  # Bucket name used by example profile it will be prefixed with the target
-  # account number for uniqueness across accounts.
-  example_bucket_name: 'tfctl-example-bucket'
+  data:
+    # Bucket name used by example profile it will be prefixed with the target
+    # account number for uniqueness across accounts.
+    example_bucket_name: 'tfctl-example-bucket'
   # Assign example-profile to all accounts in managed OUs
   profiles:
     - example-profile
 
 # Configuration to apply to accounts in Organization Units
-# Units not listed here will be ignored
+# OU's not listed here will be ignored.
 organization_units:
-  # Uncomment if you want to include Core OU accounts
-  # Core: {}
+  # Core: {} # Uncomment if you want to include Core OU accounts
   live: {}
   test: {}
   mgmt:
-    # Override the example bucket name in mgmt OU accounts
-    example_bucket_name: 'tfctl-ou-override-example'
+    data:
+      # Override the example bucket name in mgmt OU accounts
+      example_bucket_name: 'tfctl-ou-override-example'
 
 # Configuration to apply to individual accounts
 account_overrides:
   test-example1:
-    # Override the bucket name in a specific account
-    example_bucket_name: 'tfctl-account-override-example'
+    data:
+      # Override the bucket name in a specific account
+      example_bucket_name: 'tfctl-account-override-example'
 
 
-# Exclude individual accounts from Terraform runs.
-#exclude_accounts:
-#   - Audit
-#   - 'Log archive'
+# Exclude individual accounts from Terraform runs
+#
+# exclude_accounts:
+#    - Audit
+#    - 'Log archive'
