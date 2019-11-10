@@ -1,10 +1,30 @@
-:toc:
+// Settings:
+:idprefix:
+:idseparator: -
+ifndef::env-github[:icons: font]
+ifdef::env-github,env-browser[]
+:toc: macro
+:toclevels: 1
+endif::[]
+ifdef::env-github[]
+:branch: master
+:status:
+:outfilesuffix: .adoc
+:!toc-title:
+:caution-caption: :fire:
+:important-caption: :exclamation:
+:note-caption: :paperclip:
+:tip-caption: :bulb:
+:warning-caption: :warning:
+endif::[]
 
 = tfctl
 
 image:https://travis-ci.org/scalefactory/tfctl.svg?branch=master["Build Status", link="https://travis-ci.org/scalefactory/tfctl"]
 image:https://badge.fury.io/rb/tfctl.svg["Gem Version", link="https://badge.fury.io/rb/tfctl"]
 image:https://img.shields.io/badge/terraform-0.12-blue.svg["Terraform 0.12", link="https://img.shields.io/badge/terraform-0.12-blue"]
+
+toc::[]
 
 == Overview
 
