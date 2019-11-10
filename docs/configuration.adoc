@@ -18,7 +18,7 @@ ifdef::env-github[]
 :warning-caption: :warning:
 endif::[]
 
-== Configuration
+= Configuration
 
 toc::[]
 
@@ -70,7 +70,7 @@ TIP: You can display the fully merged configuration by running `tfctl -c
 conf/CONFIG_FILE.yaml -s`.  It's safe to run as it doesn't make any changes to
 AWS resources.  It's a good way to test your configuration.
 
-=== Defining arbitrary data
+== Defining arbitrary data
 
 You can define arbitrary data under the `data:` parameter, both in the root of
 the config and in the organization sections.  It will be available in Terraform
@@ -79,7 +79,7 @@ subnet ranges, s3 bucket names and so on.  `data:` in organization sections
 will be merged with accounts following the usual merge order as described
 above.
 
-=== Handling secrets
+== Handling secrets
 
 No secrets should be committed into Terraform or tfctl configuration.  Use AWS
 Secrets Manager instead and retrieve in Terraform profiles using

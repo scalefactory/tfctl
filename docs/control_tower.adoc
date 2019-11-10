@@ -18,7 +18,7 @@ ifdef::env-github[]
 :warning-caption: :warning:
 endif::[]
 
-== Control Tower integration guide
+= Control Tower integration guide
 
 This guide will help you integrate Terraform with AWS Control Tower using the
 tfctl wrapper.  This involves setting up resources for remote state tracking,
@@ -26,7 +26,7 @@ necessary IAM roles and a tfctl project.
 
 toc::[]
 
-=== Overview
+== Overview
 
 For state tracking we're going to create a dedicated `shared-services` account
 under a `mgmt` organization unit.  We'll use S3 for state storage and DynamoDB
@@ -46,7 +46,7 @@ account factory and can be assumed from the primary account.
 We're going to create a `live` and `test` organization units in Control Tower
 and provision a couple of accounts for testing.
 
-=== Prerequisites
+== Prerequisites
 
 Before starting you'll need:
 
@@ -55,7 +55,7 @@ Before starting you'll need:
  * AWS CLI tools installed on your machine.
  * Terraform 0.12 or higher.
 
-=== Configure Control Tower
+== Configure Control Tower
 
 Create the following organization units in Control Tower:
 
@@ -72,14 +72,14 @@ Then provision accounts:
 NOTE: Control Tower accounts need to be provisioned one at a time.  It takes
 approximately 20 mins to provision one.
 
-=== Install tfctl
+== Install tfctl
 
 ----
 git clone git@github.com:scalefactory/tfctl.git
 cd tfctl/ && sudo make install
 ----
 
-=== Set up AWS resources
+== Set up AWS resources
 
 It's assumed you have configured AWS CLI access to the primary account.
 
@@ -148,7 +148,7 @@ aws cloudformation describe-stacks --stack-name TfctlOrgAccess
 
 NOTE: Successful status should read: `CREATE_COMPLETE`.
 
-=== Configure tfctl
+== Configure tfctl
 
 Copy the example project directory `examples/control_tower` somewhere convenient
 and edit `conf/example.yaml`.
@@ -162,7 +162,7 @@ You need to modify the following parameters:
 
 TIP: You should keep your project directory under version control.
 
-=== Deploy example tfctl profile
+== Deploy example tfctl profile
 
 The example profile will create an S3 bucket in accounts under `test`, `live`
 and `mgmt` OUs.

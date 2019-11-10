@@ -18,7 +18,7 @@ ifdef::env-github[]
 :warning-caption: :warning:
 endif::[]
 
-== IAM roles
+= IAM roles
 
 Tfctl usually requires three IAM roles to be configured:
 

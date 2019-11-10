@@ -18,14 +18,14 @@ ifdef::env-github[]
 :warning-caption: :warning:
 endif::[]
 
-== Creating and deploying a tfctl profile
+= Creating and deploying a tfctl profile
 
 This guide will show you how to create a tfctl profile, declare some resources
 in it and deploy it to to a group of accounts in an organization unit.
 
 toc::[]
 
-=== Create a new profile
+== Create a new profile
 
 In your tfctl project directory create a new profile:
 
@@ -109,7 +109,7 @@ resource "aws_s3_bucket" "example" {
 This will create an S3 bucket with a name containing the current account name
 (which will vary depending on which account it's deployed to).
 
-=== Assign profile to accounts
+== Assign profile to accounts
 
 Before you can deploy the new profile you need to tell `tfctl` which accounts
 to deploy it to.
@@ -135,7 +135,7 @@ organization_units:
 ----
 
 
-=== Plan
+== Plan
 
 To see what would happen when the change is applied run:
 
@@ -183,7 +183,7 @@ what went wrong.
 tfctl will generate a plan file automatically and use it with `apply` in the
 next step.
 
-=== Apply
+== Apply
 
 Once you're happy with the plan, apply it.
 ----

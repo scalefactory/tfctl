@@ -18,7 +18,7 @@ ifdef::env-github[]
 :warning-caption: :warning:
 endif::[]
 
-== Project layout
+= Project layout
 
 Example project structure
 ----
@@ -38,7 +38,7 @@ project_dir/
 
 toc::[]
 
-=== tfctl configuration file
+== tfctl configuration file
 
 Assigns Terraform profiles and configuration to accounts based on:
 
@@ -51,7 +51,7 @@ The configuration data is exposed to terraform via a profile `config` variable.
 It also defines Terraform and tfctl configuration such as state tracking and
 what IAM roles to use.
 
-=== profiles
+== profiles
 
 Profiles are re-usable collections of resources which can be applied to
 accounts.  They are implemented just like usual modules but provide an
@@ -60,6 +60,6 @@ other data sources).  Profiles often compose multiple modules and provide
 configuration data to them.  This approach makes it possible to re-use standard
 modules (e.g. Terraform module registry).
 
-=== modules
+== modules
 
 Standard Terraform modules.
