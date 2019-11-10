@@ -1,3 +1,23 @@
+// Settings:
+:idprefix:
+:idseparator: -
+ifndef::env-github[:icons: font]
+ifdef::env-github,env-browser[]
+:toc: macro
+:toclevels: 1
+endif::[]
+ifdef::env-github[]
+:branch: master
+:status:
+:outfilesuffix: .adoc
+:!toc-title:
+:caution-caption: :fire:
+:important-caption: :exclamation:
+:note-caption: :paperclip:
+:tip-caption: :bulb:
+:warning-caption: :warning:
+endif::[]
+
 == IAM roles
 
 Tfctl usually requires three IAM roles to be configured:

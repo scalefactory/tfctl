@@ -1,7 +1,29 @@
+// Settings:
+:idprefix:
+:idseparator: -
+ifndef::env-github[:icons: font]
+ifdef::env-github,env-browser[]
+:toc: macro
+:toclevels: 1
+endif::[]
+ifdef::env-github[]
+:branch: master
+:status:
+:outfilesuffix: .adoc
+:!toc-title:
+:caution-caption: :fire:
+:important-caption: :exclamation:
+:note-caption: :paperclip:
+:tip-caption: :bulb:
+:warning-caption: :warning:
+endif::[]
+
 == Creating and deploying a tfctl profile
 
 This guide will show you how to create a tfctl profile, declare some resources
 in it and deploy it to to a group of accounts in an organization unit.
+
+toc::[]
 
 === Create a new profile
 
