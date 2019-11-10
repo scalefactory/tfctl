@@ -1,8 +1,8 @@
 = Changelog
 
-== unreleased
+== 0.2.0
 
-* feat: configurable tf and provider versions
+* feat: configurable Terraform and AWS provider version requirements
 * fix: use provider region from config file
 * fix: fail when terraform command is missing
 
