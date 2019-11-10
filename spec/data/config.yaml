@@ -11,18 +11,16 @@ tf_required_version: '>= 0.12.0'
 aws_provider_version: '>= 2.14'
 tfctl_role_arn: 'arn:aws:iam::0123456789:role/TfCtlUser'
 
-# Organization config
+data:
+  global_param: 'global'
 
-primary_account: primary
-exclude_accounts:
-  - primary
-  - security
-  - log-archive
+# Organization config
 
 organization_root:
   tf_execution_role: 'TerraformUser'
   region: 'eu-west-1'
-  root_param: 'root'
+  data:
+    root_param: 'root'
   profiles:
     - global
 
@@ -30,23 +28,31 @@ organization_units:
   core: {}
 
   team:
-    team_param: 'shared'
+    data:
+      team_param: 'shared'
     profiles:
       - team-shared
   team/live:
     profiles:
       - team-live
   team/test:
-    team_param: 'ou_override'
-    root_param: 'ou_override'
+    data:
+      team_param: 'ou_override'
+      root_param: 'ou_override'
     profiles:
       - team-test
 
 account_overrides:
 
   team-live-1:
-    account_param: 'account'
-    team_param: 'account_override'
-    root_param: 'account_override'
+    data:
+      account_param: 'account'
+      team_param: 'account_override'
+      root_param: 'account_override'
     profiles:
       - team-live-1
+
+exclude_accounts:
+  - primary
+  - security
+  - log-archive
