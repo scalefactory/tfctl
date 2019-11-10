@@ -4,16 +4,17 @@
 
 image:https://travis-ci.org/scalefactory/tfctl.svg?branch=master["Build Status", link="https://travis-ci.org/scalefactory/tfctl"]
 image:https://badge.fury.io/rb/tfctl.svg["Gem Version", link="https://badge.fury.io/rb/tfctl"]
+image:https://img.shields.io/badge/terraform-0.12-blue.svg["Terraform 0.12", link="https://img.shields.io/badge/terraform-0.12-blue"]
 
 == Overview
 
 Tfctl is a small Terraform wrapper for working with multi-account AWS
 infrastructures where new accounts may be created dynamically and on-demand.
 
-Discovers accounts by reading the AWS Organizations API and can assign
-Terraform resources to accounts based on the organization hierarchy.  Resources
-can be assigned globally, based on organization unit or individual accounts.
-It supports nested OU hierarchies.
+It discovers accounts by reading the AWS Organizations API and can assign
+Terraform resources to multiple accounts based on the organization hierarchy.
+Resources can be assigned globally, based on organization unit or to individual
+accounts.  It supports nested OU hierarchies and helps keep your Terraform DRY.
 
 Tfctl was originally developed to integrate Terraform with
 https://aws.amazon.com/solutions/aws-landing-zone/[AWS Landing Zone] and
