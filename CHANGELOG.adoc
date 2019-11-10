@@ -1,5 +1,15 @@
 = Changelog
 
+== 1.0.0-rc1 (unreleased)
+
+* feat(config): JSON schema config validation
+* feat(config): added 'data' parameter
+
+BREAKING CHANGE: This release moves user defined data under a separate `data`
+parameter so it can be easily distinguished from parameters required by tfctl.
+Configuration file will need to be updated to reflect this to pass validation.
+
+
 == 0.2.0
 
 * feat: configurable Terraform and AWS provider version requirements
