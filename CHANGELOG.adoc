@@ -1,6 +1,6 @@
 = Changelog
 
-== 1.0.0-rc1 (unreleased)
+== 1.0.0
 
 * feat(config): JSON schema config validation
 * feat(config): added 'data' parameter
