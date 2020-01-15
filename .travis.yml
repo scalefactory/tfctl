@@ -1,18 +1,18 @@
 rvm:
-  - 2.3
-  - 2.6
+- 2.3
+- 2.6
 os: linux
 language: ruby
 script: make test
 jobs:
   include:
-    - stage: Gem release
-      rvm: 2.6
-      deploy:
-        provider: rubygems
-        api_key:
-          secure: FKAONS7x6koN7oiEULr4ViwjlDBzbE0bCgqhXRP4DfTtlRyEymeqgrfSIqkVH7unjd0muIGrMBnFuaQVSx7648RS1Ss0QAJo32SVnzoYl1P03cijqNmbbaf1jRdA3IGmh0gV5vsXrmlHiP8gfAuC9PqQ550OzxzWUvEI8vXgSTibmKd/PoQinv5g/dq0gBFjlhSMt/k3Z9WlMmkEsAro/r/Ie2M7mItHPT65f0ga5q5SeujPQQ3Sd/l3mznh37bmnw5RZpFDYdA7jL2p0Y58XJPBU8soa3ZC5GeHyxCYVoGh6EDGAFb83ERRT6rQ7ywkOufTv1o497P7a/prSbvT6fzc+DcugXPEaglT+dUXMe36OoF907Xva4vq3xIHV2N/yrxbDM85hmMk22wEU+9wpDDzFNQnfsXNbaHG9F7gLgy0eoTRrSuJf6cPDlE8pwvn7b8cjieeqWc//ZNhSYnHYZGER4LFINWVxs68Eofmmqp2IESTcUpJ8oB4bV+bzzyobJMRobOXu2hvgCrTdr6r/PnckpAfZE/l4nVQa14f1FU//8bU3DwvNun6TX1Ujp+XNiRDUlvP2KnkBU4s5rsIkL3lCHW7r6GipSk6SOvGMTz5eySMsoWvZQBdAzk/OxcIteeWH9pdo1Hbu5x2/bwyuTRCQ9E79CKWDKlIQwCgUY0=
-        gem: tfctl
-        on:
-          tags: true
-          repo: scalefactory/tfctl
+  - stage: Gem release
+    rvm: 2.6
+    deploy:
+      provider: rubygems
+      api_key:
+        secure: LAVcdER+LtQ2TSUrVOY7Be1BC7GXJRD0QBt386vRM5Nld5QaD9Ow9gtN6FprzkzloI4R8BkPWqZbAT6YjC+C0AFB5HK6iPwD2bLsiF9w3ccDD+yrW99RHxiErpmYMun2PqZv0WkJ/pkEplPCKMRFv7SM7W9DMRlU7dsXc1v6IVyIb5u3A04jErS2jXXKY0ijlCDJYVo8zzYL6yUmUcXhc//3CIVnu2Miu6Qr8h7e6jMXNUWfMkwEXsFP9id4TsCz7hRY+39PkiBAknHTN5UqjjJiEOknZnHeTBcVPvi2h2xv+fFLSzVTxlxaRsVoMCShQp5D12qzhQObRJsRVQFs8Yyg9IYMyPdxssFYyUZFaAy5taWDm57uM3HTHylm/Dq3LmXTgGNxWUUkf2oh1g7R6cYZpBUQwiEPzhZQ7CoBQbGUAJmH9ZU9m+cr8kuAOUipd6BNEDvn/fIH4WJsRCNP72JGX16JBpuICvpkuNhskZT91xFlYk1pTXHOxNpbTcxUTgMHhrTqspeRXPmf6DiYGvjMb2S6kaoGqCIRIcwl0TGKuMsOMqR9SqF8gubkqHMVbSl1E7mwBn4ke8/7IGoMkWOGwUpVxqVOLBHi6zSR09RTVSbKl4oiFV3ZwmVPSxDncq54MptyJ2WCZ7dD6ht2l+VA8iGwYeIoqOpwGWxyuNI=
+      gem: tfctl
+      on:
+        tags: true
+        repo: scalefactory/tfctl
