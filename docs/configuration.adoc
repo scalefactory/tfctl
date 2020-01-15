@@ -87,3 +87,11 @@ No secrets should be committed into Terraform or tfctl configuration.  Use AWS
 Secrets Manager instead and retrieve in Terraform profiles using
 https://www.terraform.io/docs/providers/aws/d/secretsmanager_secret.html[secrets
 manager data source]
+
+== Configuration Schema
+
+Config file is validated using https://json-schema.org/[JSON Schema].
+
+The schema is defined in
+https://github.com/scalefactory/tfctl/blob/master/lib/tfctl/schema.rb[lib/tfctl/schema.rb]
+and is a good place to look up all available options.
