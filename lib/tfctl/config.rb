@@ -48,7 +48,7 @@ module Tfctl
             @config.to_json
         end
 
-        # Filters accounts by account property
+        # Filters accounts by an account property
         def find_accounts(property_name, property_value)
             output =[]
             @config[:accounts].each do |account|
@@ -88,7 +88,6 @@ module Tfctl
 
         # Retrieves AWS Organizations data and merges it with data from yaml config.
         def load_config(config_name, yaml_config, aws_org_config)
-
             # AWS Organizations data
             config = aws_org_config
             # Merge organization sections from yaml file

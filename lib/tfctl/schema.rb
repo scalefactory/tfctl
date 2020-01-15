@@ -29,7 +29,7 @@ module Tfctl
             def main_schema
                 iam_arn_pattern = 'arn:aws:iam:[a-z\-0-9]*:[0-9]{12}:[a-zA-Z\/+@=.,]*'
 
-                # rubocop:disable Layout/AlignHash
+                # rubocop:disable Layout/HashAlignment
                 {
                     'type'       => 'object',
                     'properties' => {
@@ -61,7 +61,7 @@ module Tfctl
                     ],
                     'additionalProperties' => false,
                 }
-                # rubocop:enable Layout/AlignHash
+                # rubocop:enable Layout/HashAlignment
             end
 
             def org_schema
