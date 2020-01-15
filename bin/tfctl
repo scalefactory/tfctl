@@ -22,7 +22,7 @@ options = {
     ou:          nil,
     all:         nil,
     show_config: false,
-    config_file: nil,
+    config_file: 'tfctl.yaml',
     unbuffered:  false,
     debug:       false,
     use_cache:   false,
@@ -68,10 +68,6 @@ begin
 
     # Validate CLI arguments
 
-    if options[:config_file].nil?
-        raise OptionParser::MissingArgument, '--config-file'
-    end
-
     unless File.exist? options[:config_file]
         raise OptionParser::InvalidOption,
               "Config file not found in: #{options[:config_file]}"
@@ -104,7 +100,7 @@ end
 
 
 
-# Generates configuration and runs Terraform commands for a target account.
+# Execute terraform in target accounts
 def run_account(config, account, options, tf_argv, log)
 
     # Skip excluded accounts
@@ -145,6 +141,7 @@ begin
     log.info 'tfctl running'
 
     config_name = File.basename(options[:config_file]).chomp('.yaml')
+    config_name = 'default' if config_name == 'tfctl'
     log.info "Using config: #{config_name}"
 
     log.info 'Working out AWS account topology'

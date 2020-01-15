@@ -6,7 +6,7 @@ AllCops:
 Layout/IndentationWidth:
   Width: 4
 
-Layout/IndentHeredoc:
+Layout/HeredocIndentation:
   Enabled: false
 
 Layout/EmptyLines:
@@ -15,7 +15,7 @@ Layout/EmptyLines:
 Layout/EmptyLinesAroundMethodBody:
   Enabled: false
 
-Layout/AlignHash:
+Layout/HashAlignment:
   EnforcedHashRocketStyle:
     - table
   EnforcedColonStyle:

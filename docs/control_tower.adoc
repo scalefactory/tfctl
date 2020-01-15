@@ -151,7 +151,7 @@ NOTE: Successful status should read: `CREATE_COMPLETE`.
 == Configure tfctl
 
 Copy the example project directory `examples/control_tower` somewhere convenient
-and edit `conf/example.yaml`.
+and edit `tfctl.yaml`.
 
 You need to modify the following parameters:
 
@@ -172,7 +172,7 @@ NOTE: Run tfctl commands from the root of you project directory.
 First dump the configuration to verify everything works:
 
 ----
-tfctl -c conf/example.yaml -s
+tfctl -s
 ----
 
 This will not make any changes but will print out a yaml containing the final,
@@ -182,7 +182,7 @@ their configuration.
 Initialise terraform for all discovered accounts:
 
 ----
-tfctl -c conf/example.yaml --all -- init
+tfctl --all -- init
 ----
 
 Tfctl will run Terraform against all accounts in parallel.
@@ -190,19 +190,19 @@ Tfctl will run Terraform against all accounts in parallel.
 Run plan:
 
 ----
-tfctl -c conf/example.yaml --all -- plan
+tfctl --all -- plan
 ----
 
 and apply:
 
 ----
-tfctl -c conf/example.yaml --all -- apply
+tfctl --all -- apply
 ----
 
 To destroy created resources run:
 
 ----
-tfctl -c conf/example.yaml --all -- destroy -auto-approve
+tfctl --all -- destroy -auto-approve
 ----
 
 That's it! You can now execute terraform across your Control Tower estate.

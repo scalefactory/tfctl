@@ -1,5 +1,9 @@
 = Changelog
 
+== 1.1.0
+
+* feat: look for configuration in `tfctl.yaml` by default.
+
 == 1.0.0
 
 * feat(config): JSON schema config validation

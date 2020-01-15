@@ -94,7 +94,8 @@ Anatomy of a tfctl command:
 tfctl -c CONFIG_FILE TARGET_OPTIONS -- TERRAFORM_COMMAND
 ----
 
-* `-c` specifies which tfctl config file to use (usually in `conf/`)
+* `-c` specifies which tfctl config file to use (defaults to `tfctl.yaml` in
+ current working directory if not set)
 * `TARGET_OPTIONS` specifies which accounts to target.  This could be an individual
   account, a group of accounts in an organizational unit or all accounts.
 * `TERRAFORM_COMMAND` will be passed to `terraform` along with any
@@ -116,13 +117,13 @@ tfctl -h
 Show merged configuration:
 
 ----
-tfctl -c conf/example.yaml -s
+tfctl -s
 ----
 
 List all discovered accounts:
 
 ----
-tfctl -c conf/example.yaml --all -l
+tfctl --all -l
 ----
 
 TIP: This can be narrowed down using targeting options and is a good way to
@@ -131,44 +132,44 @@ test what accounts match.
 Run Terraform init across all accounts:
 
 ----
-tfctl -c conf/example.yaml --all -- init
+tfctl --all -- init
 ----
 
 Run plan in `test` OU accounts:
 
 ----
-tfctl -c conf/example.yaml -o test -- plan
+tfctl -o test -- plan
 ----
 
 Run plan in `live` accounts assuming that `live` is a child OU in multiple
 organization units:
 
 ----
-tfctl -c conf/example.yaml -o '.*/live' -- plan
+tfctl -o '.*/live' -- plan
 ----
 
 Run plan in an individual account:
 
 ----
-tfctl -c conf/example.yaml -a example-account - plan
+tfctl -a example-account - plan
 ----
 
 Run apply in all accounts:
 
 ----
-tfctl -c conf/example.yaml --all -- apply
+tfctl --all -- apply
 ----
 
 Run destroy in `test` OU accounts:
 
 ----
-tfctl -c conf/example.yaml -o test -- destroy -auto-approve
+tfctl -o test -- destroy -auto-approve
 ----
 
 Don't buffer the output:
 
 ----
-tfctl -c conf/example.yaml -a example-account -u -- plan
+tfctl -a example-account -u -- plan
 ----
 
 This will show output in real time.  Usually output is buffered and displayed

@@ -81,7 +81,7 @@ profile.  Tfctl configuration can be accessed using this variable. This It
 includes an array of all discovered accounts as well their parameters from
 tfctl config file.
 
-TIP: You can run `tfctl -c conf/CONFIG_FILE.yaml -s` to show the config data in
+TIP: You can run `tfctl -s` to show the config data in
 yaml format.  This exact data is available in the `config` variable in your
 profile.
 
@@ -124,7 +124,7 @@ You have few options here:
 For the sake of this example we're going to deploy our bucket to all accounts
 in `test` OU.
 
-In tfctl config file add the profile to the `test` OU:
+In `tfctl.yaml` add the profile to the `test` OU:
 
 [source, yaml]
 ----
@@ -140,8 +140,8 @@ organization_units:
 To see what would happen when the change is applied run:
 
 ----
-tfctl -c conf/example.yaml -o test -- init
-tfctl -c conf/example.yaml -o test -- plan
+tfctl -o test -- init
+tfctl -o test -- plan
 ----
 
 This will run `terraform init` to initialise terraform and then `terraform
@@ -187,5 +187,5 @@ next step.
 
 Once you're happy with the plan, apply it.
 ----
-tfctl -c conf/example.yaml -o test -- apply
+tfctl -o test -- apply
 ----
