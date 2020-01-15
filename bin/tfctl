@@ -141,6 +141,7 @@ begin
     log.info 'tfctl running'
 
     config_name = File.basename(options[:config_file]).chomp('.yaml')
+    config_name = 'default' if config_name == 'tfctl'
     log.info "Using config: #{config_name}"
 
     log.info 'Working out AWS account topology'
