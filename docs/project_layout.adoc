@@ -23,8 +23,7 @@ endif::[]
 Example project structure
 ----
 project_dir/
-├── conf
-│   └── example.yaml
+├── tfctl.conf
 ├── modules
 │   └── s3-bucket
 │       ├── main.tf
@@ -50,6 +49,11 @@ The configuration data is exposed to terraform via a profile `config` variable.
 
 It also defines Terraform and tfctl configuration such as state tracking and
 what IAM roles to use.
+
+By default tfctl will use `tfctl.yaml` in it's current working directory.  You
+can specify a different file using `-c`.  Multiple configurations are supported
+in the same project directory and generated data will be stored separately for
+each config file in `.tfctl/`.
 
 == profiles
 
