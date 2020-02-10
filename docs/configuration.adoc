@@ -24,8 +24,8 @@ toc::[]
 
 == Overview
 
-Tfctl retrieves initial account configuration from AWS Organizations and merges
-it with configuration specified in a yaml file (`tfctl.yaml` by default).
+`tfctl` retrieves initial account configuration from AWS Organizations and merges
+it with configuration specified in YAML format (`tfctl.yaml` by default).
 
 The configuration is merged in the following order:
 
@@ -83,14 +83,16 @@ above.
 
 == Handling secrets
 
-No secrets should be committed into Terraform or tfctl configuration.  Use AWS
-Secrets Manager instead and retrieve in Terraform profiles using
+CAUTION: Do not commit secrets into your Terraform or tfctl configuration.
+
+Instead, use AWS Secrets Manager and retrieve secrets in Terraform profiles using
+the
 https://www.terraform.io/docs/providers/aws/d/secretsmanager_secret.html[secrets
-manager data source]
+manager data source].
 
 == Configuration Schema
 
-Config file is validated using https://json-schema.org/[JSON Schema].
+The configuration file is validated using https://json-schema.org/[JSON Schema].
 
 The schema is defined in
 https://github.com/scalefactory/tfctl/blob/master/lib/tfctl/schema.rb[lib/tfctl/schema.rb]

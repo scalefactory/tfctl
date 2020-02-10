@@ -20,7 +20,7 @@ endif::[]
 
 = IAM roles
 
-Tfctl usually requires three IAM roles to be configured:
+`tfctl` usually requires three IAM roles to be configured:
 
  * `TfctlRole` - read only access to AWS Organizations set up in the primary account.
  * `TerraformStateRole` - access to remote state resources (S3, DynamoDB) in the
@@ -28,7 +28,7 @@ Tfctl usually requires three IAM roles to be configured:
  * `TerraformExecutionRole` - configured in all spoke accounts and used for executing Terraform.
 
 The user executing tfctl needs permission to assume all three roles cross
-account.  Tfctl will assume roles automatically for you.
+account. Once these are configured, tfctl automatically assumes roles for you.
 
 It's possible to configure different Terraform execution roles in different
 spoke accounts based on OU or account names.  This can be used to restrict
