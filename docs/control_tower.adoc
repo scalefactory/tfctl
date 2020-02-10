@@ -31,7 +31,7 @@ toc::[]
 For state tracking we're going to create a dedicated `shared-services` account
 under a `mgmt` organization unit.  We'll use S3 for state storage and DynamoDB
 for locking.  `TerraformState` IAM role will be created for cross account
-access to state resources from the primary account.
+access to state resources from the primary AWS account.
 
 In the primary account we'll create a `TfctlOrgAccess` role.  It gives tfctl
 read only access to AWS Organizations which is used to discover accounts and
@@ -50,9 +50,10 @@ and provision a couple of accounts for testing.
 
 Before starting you'll need:
 
- * Control Tower set up in your primary account.
- * A user with `AdministratorAccess` privileges in primary account.
- * AWS CLI tools installed on your machine.
+ * An AWS account that is part of an Organization.
+ * Control Tower set up in your primary AWS account.
+ * A user with `AdministratorAccess` privileges in your primary AWS account.
+ * AWS CLI tools installed on your local machine.
  * Terraform 0.12 or higher.
 
 == Configure Control Tower
@@ -74,6 +75,7 @@ approximately 20 mins to provision one.
 
 == Install tfctl
 
+[source,shell]
 ----
 git clone git@github.com:scalefactory/tfctl.git
 cd tfctl/ && sudo make install
@@ -85,17 +87,21 @@ It's assumed you have configured AWS CLI access to the primary account.
 
 We'll use CloudFormation templates in `examples/bootstrap/`.
 
-First export configuration using environment variables making sure to change to
-values to suit your set up:
+First export configuration using environment variables, making sure to change to
+values to suit your setup:
 
+[source,shell]
 ----
-export PRIMARY_ACCOUNT_ID=11111111
-export SHARED_SERVICES_ACCOUNT_ID=22222222
+# Change these to match your setup
+export PRIMARY_ACCOUNT_ID=123456789012
+export SHARED_SERVICES_ACCOUNT_ID=345678901234
 export STATE_BUCKET_NAME='example-terraform-state'
+export AWS_REGION=eu-west-1
 ----
 
 Create the remote state resources stack set:
 
+[source,shell]
 ----
 cd examples/bootstrap/
 
@@ -107,31 +113,34 @@ aws cloudformation create-stack-set \
     --execution-role-name AWSControlTowerExecution \
     --administration-role-arn arn:aws:iam::${PRIMARY_ACCOUNT_ID}:role/service-role/AWSControlTowerStackSetRole \
     --parameters ParameterKey=PrimaryAccountId,ParameterValue=${PRIMARY_ACCOUNT_ID} \
-    ParameterKey=TerraformStateBucket,ParameterValue=${STATE_BUCKET_NAME}
+    ParameterKey=TerraformStateBucket,ParameterValue="${STATE_BUCKET_NAME}"
 ----
 
-Create a stack set instance in you shared services account:
+Create a stack set instance in your shared services account:
 
+[source,shell]
 ----
 aws cloudformation create-stack-instances \
     --stack-set-name TerraformState \
     --accounts ${SHARED_SERVICES_ACCOUNT_ID} \
-    --regions eu-west-1
+    --regions ${AWS_REGION}
 ----
 
 Check status:
 
+[source,shell]
 ----
 aws cloudformation describe-stack-instance \
     --stack-set-name TerraformState \
     --stack-instance-account ${SHARED_SERVICES_ACCOUNT_ID} \
-    --stack-instance-region eu-west-1
+    --stack-instance-region ${AWS_REGION}
 ----
 
 NOTE: Initial status will be `OUTDATED`, it should change to `CURRENT` once deployed.
 
-Deploy `TfctlOrgAccess` IAM role stack:
+Deploy the `TfctlOrgAccess` IAM role stack:
 
+[source,shell]
 ----
 aws cloudformation create-stack \
     --stack-name TfctlOrgAccess \
@@ -142,6 +151,7 @@ aws cloudformation create-stack \
 
 Check status:
 
+[source,shell]
 ----
 aws cloudformation describe-stacks --stack-name TfctlOrgAccess
 ----
@@ -158,7 +168,7 @@ You need to modify the following parameters:
  * `tf_state_bucket` - set to `$STATE_BUCKET_NAME`
  * `tf_state_role_arn` - set shared services account ID
  * `tfctl_role_arn` - set primary account ID
- * `primary_account` - set the primary account name.  You can find it in AWS Organizations.
+ * `primary_account` - set the primary account name.  You can find it through AWS Organizations in the console.
 
 TIP: You should keep your project directory under version control.
 
@@ -169,43 +179,51 @@ and `mgmt` OUs.
 
 NOTE: Run tfctl commands from the root of you project directory.
 
-First dump the configuration to verify everything works:
+First, dump the configuration to verify everything works:
 
+[source,shell]
 ----
 tfctl -s
 ----
 
-This will not make any changes but will print out a yaml containing the final,
+This will not make any changes but will print out YAML containing the final,
 merged configuration data.  It should contain a list of discovered accounts and
 their configuration.
 
-Initialise terraform for all discovered accounts:
+Initialise Terraform for all discovered accounts:
 
+[source,shell]
 ----
 tfctl --all -- init
 ----
 
 Tfctl will run Terraform against all accounts in parallel.
 
-Run plan:
+`plan` the Terraform:
 
+[source,shell]
 ----
 tfctl --all -- plan
 ----
 
-and apply:
+and `apply` it:
 
+[source,shell]
 ----
 tfctl --all -- apply
 ----
 
-To destroy created resources run:
 
+== Clean up
+
+To destroy created resources, run:
+
+[source,shell]
 ----
 tfctl --all -- destroy -auto-approve
 ----
 
-That's it! You can now execute terraform across your Control Tower estate.
+That's it! You can now execute Terraform across your Control Tower estate.
 
 TIP: Your project directory should be under version control excluding the
 `.tfctl` directory which is automatically generated.

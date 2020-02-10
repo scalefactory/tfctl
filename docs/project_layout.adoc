@@ -50,12 +50,12 @@ The configuration data is exposed to terraform via a profile `config` variable.
 It also defines Terraform and tfctl configuration such as state tracking and
 what IAM roles to use.
 
-By default tfctl will use `tfctl.yaml` in it's current working directory.  You
+By default, tfctl will use `tfctl.yaml` in its current working directory.  You
 can specify a different file using `-c`.  Multiple configurations are supported
 in the same project directory and generated data will be stored separately for
 each config file in `.tfctl/`.
 
-== profiles
+== `profiles`
 
 Profiles are re-usable collections of resources which can be applied to
 accounts.  They are implemented just like usual modules but provide an
@@ -64,6 +64,6 @@ other data sources).  Profiles often compose multiple modules and provide
 configuration data to them.  This approach makes it possible to re-use standard
 modules (e.g. Terraform module registry).
 
-== modules
+== `modules`
 
 Standard Terraform modules.
