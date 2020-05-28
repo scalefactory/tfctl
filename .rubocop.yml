@@ -45,7 +45,7 @@ Metrics/BlockLength:
 Metrics/MethodLength:
   Enabled: false
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 140
 
 Metrics/AbcSize:

@@ -3,6 +3,8 @@
 == Upcoming
 
  * fix: handle empty response containing children from Organizations API (thanks @grothja)
+ * chore: stopped testing on EOL Rubies 2.3 and 2.4 (but should still currently work)
+ * chore: dependencies minimum version bump
 
 == 1.1.0
 
