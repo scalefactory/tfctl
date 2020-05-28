@@ -71,23 +71,25 @@ module Tfctl
             @aws_org_client.list_children(
                 child_type: 'ORGANIZATIONAL_UNIT',
                 parent_id:  parent_id,
-            ).children.each do |child|
+            ).each do |resp|
+                resp.children.each do |child|
 
-                begin
-                    ou = @aws_org_client.describe_organizational_unit(
-                        organizational_unit_id: child.id,
-                    ).organizational_unit
-                rescue Aws::Organizations::Errors::TooManyRequestsException
-                    # FIXME: - use logger
-                    puts 'AWS Organizations: too many requests.  Retrying in 5 secs.'
-                    sleep 5
-                    retries += 1
-                    retry if retries < 10
+                    begin
+                        ou = @aws_org_client.describe_organizational_unit(
+                            organizational_unit_id: child.id,
+                        ).organizational_unit
+                    rescue Aws::Organizations::Errors::TooManyRequestsException
+                        # FIXME: - use logger
+                        puts 'AWS Organizations: too many requests.  Retrying in 5 secs.'
+                        sleep 5
+                        retries += 1
+                        retry if retries < 10
+                    end
+
+                    ou_name = parent_name == :root ? ou.name.to_sym : "#{parent_name}/#{ou.name}".to_sym
+
+                    output[ou_name] = ou.id
                 end
-
-                ou_name = parent_name == :root ? ou.name.to_sym : "#{parent_name}/#{ou.name}".to_sym
-
-                output[ou_name] = ou.id
             end
             output
         end
