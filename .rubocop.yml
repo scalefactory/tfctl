@@ -1,6 +1,6 @@
 ---
 AllCops:
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: 2.5
   DisplayCopNames: true
 
 Layout/IndentationWidth:
@@ -76,4 +76,8 @@ Style/TrailingCommaInHashLiteral:
     EnforcedStyleForMultiline: comma
 
 Style/RedundantReturn:
+  Enabled: false
+
+# don't break older Rubies just because of style
+Style/RedundantBegin:
   Enabled: false
