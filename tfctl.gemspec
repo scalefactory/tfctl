@@ -25,12 +25,12 @@ Gem::Specification.new do |spec|
 
     # Think when adding new dependencies.  Is it really necessary?
     # "The things you own end up owning you" etc.
-    spec.add_dependency 'aws-sdk-organizations', '~> 1.13'
+    spec.add_dependency 'aws-sdk-organizations', '~> 1.40'
     spec.add_dependency 'json_schemer',          '~> 0.2'
-    spec.add_dependency 'parallel',              '~> 1.17'
+    spec.add_dependency 'parallel',              '~> 1.19'
     spec.add_dependency 'terminal-table',        '~> 1.8'
 
     spec.add_development_dependency 'guard-rspec', '~> 4.7'
-    spec.add_development_dependency 'rspec',       '~> 3.8'
-    spec.add_development_dependency 'rubocop',     '~> 0.76'
+    spec.add_development_dependency 'rspec',       '~> 3.9'
+    spec.add_development_dependency 'rubocop',     '~> 0.84'
 end
