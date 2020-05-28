@@ -1,6 +1,7 @@
 rvm:
-- 2.3
+- 2.5
 - 2.6
+- 2.7
 os: linux
 language: ruby
 script: make test
