@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
     spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
     spec.require_paths = ['lib']
 
-    spec.required_ruby_version = '>= 2.3.8'
+    spec.required_ruby_version = '>= 2.5.0'
 
     # Think when adding new dependencies.  Is it really necessary?
     # "The things you own end up owning you" etc.
