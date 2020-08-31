@@ -49,9 +49,7 @@ module Tfctl
                 'TF_IN_AUTOMATION'   => 'true',
             }
 
-            terraform_env = ENV.keep_if do |variable_name|
-                variable_name.start_with?('TF_')
-            end.merge(enforced_terraform_environment)
+            terraform_env = ENV.to_h.merge(enforced_terraform_environment)
 
             log.debug "#{account_name}: Executing: #{exec.shelljoin}"
 
