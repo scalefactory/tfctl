@@ -5,7 +5,7 @@
 # create final configuration used by tfctl.  You can view the merged
 # configuration by running:
 #
-#   tfctl -c conf/example.yaml -s
+#   tfctl -c conf/tfctl.yaml -s
 #
 
 #
