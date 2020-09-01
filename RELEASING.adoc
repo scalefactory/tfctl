@@ -1,0 +1,13 @@
+= Releasing
+
+This document is aimed at `tfctl` maintainers and describes the process of
+releasing a new gem version.
+
+== Process
+
+* Smoke test in SF test accounts: https://github.com/scalefactory/sf-control-tower
+* Bump version in `lib/tfctl/version.rb`
+* Update `CHANGELOG.adoc`
+* Commit
+* Create a new GitHub release and version tag using format: vX.X.X
+* TravisCI will build and release the gem automatically: https://travis-ci.org/github/scalefactory/tfctl
