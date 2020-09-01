@@ -41,22 +41,18 @@ module Tfctl
             # Create the command
             exec = [cmd] + [subcmd] + args
 
-            # Copy TF_* variables from process environment, but
-            # override those based on the following hash:
-            enforced_terraform_environment = {
-                'CHECKPOINT_DISABLE' => '1',
+            # Set environment variables for Terraform
+            env = {
                 'TF_INPUT'           => '0',
+                'CHECKPOINT_DISABLE' => '1',
                 'TF_IN_AUTOMATION'   => 'true',
+                # 'TF_LOG'             => 'TRACE'
             }
-
-            terraform_env = ENV.keep_if do |variable_name|
-                variable_name.start_with?('TF_')
-            end.merge(enforced_terraform_environment)
 
             log.debug "#{account_name}: Executing: #{exec.shelljoin}"
 
             FileUtils.cd path
-            Open3.popen3(terraform_env, exec.shelljoin) do |stdin, stdout, stderr, wait_thr|
+            Open3.popen3(env, exec.shelljoin) do |stdin, stdout, stderr, wait_thr|
                 stdin.close_write
 
                 # capture stdout and stderr in separate threads to prevent deadlocks
