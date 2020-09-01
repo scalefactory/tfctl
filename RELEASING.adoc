@@ -5,7 +5,7 @@ releasing a new gem version.
 
 == Process
 
-* Smoke test in SF test accounts: https://github.com/scalefactory/sf-control-tower
+* Smoke test in SF test accounts: https://github.com/scalefactory/tfctl-test
 * Bump version in `lib/tfctl/version.rb`
 * Update `CHANGELOG.adoc`
 * Commit
