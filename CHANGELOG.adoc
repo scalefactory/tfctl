@@ -2,6 +2,16 @@
 
 == Upcoming
 
+== 1.2.2
+ * chore: reverted PR #11 - not necessary and introduced regression.  See PR #13 for details.
+
+== 1.2.1
+ * chore: added required Ruby version to Gemspec.
+
+== 1.2.0
+
+ * feat: pass TF_ environment variables to terraform (PR #11).
+
 == 1.1.1
 
  * fix: handle empty response from Organizations API containing children (thanks @grothja)
