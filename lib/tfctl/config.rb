@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative '../hash.rb'
-require_relative 'error.rb'
+require_relative '../hash'
+require_relative 'error'
 require 'yaml'
 require 'json'
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../lib/tfctl/config.rb'
+require_relative '../lib/tfctl/config'
 
 RSpec.describe Tfctl::Config do
     # test data

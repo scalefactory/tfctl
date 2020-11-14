@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 require 'yaml'
-require_relative '../lib/hash.rb'
-require_relative '../lib/tfctl/schema.rb'
+require_relative '../lib/hash'
+require_relative '../lib/tfctl/schema'
 
 RSpec.describe Tfctl::Schema do
     let(:yaml_config) do

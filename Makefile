@@ -10,11 +10,11 @@ guard: vendor
 	$(info => Starting guard)
 	@bundle exec guard
 
-rubocop:
+rubocop: vendor
 	$(info => Running rubocop)
 	@vendor/bin/rubocop
 
-spec:
+spec: vendor
 	$(info => Running spec tests)
 	@vendor/bin/rspec
 

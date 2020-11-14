@@ -18,13 +18,14 @@ class Hash
         merge(second.to_h, &merger)
     end
 
-    # Copied from ruby 2.6 Psych for 2.3 compatibility.
     def symbolize_names!(result = self)
         case result
         when Hash
+            # rubocop:disable Style/HashEachMethods
             result.keys.each do |key|
                 result[key.to_sym] = symbolize_names!(result.delete(key))
             end
+            # rubocop:enable Style/HashEachMethods
         when Array
             result.map! { |r| symbolize_names!(r) }
         end

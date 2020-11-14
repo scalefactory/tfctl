@@ -6,7 +6,7 @@ module Tfctl
     class Logger
 
         def initialize(log_level)
-            @outlog  = ::Logger.new(STDOUT)
+            @outlog  = ::Logger.new($stdout)
 
             self.level = log_level
 

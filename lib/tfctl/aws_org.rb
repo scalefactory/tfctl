@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'error.rb'
+require_relative 'error'
 require 'aws-sdk-organizations'
 
 module Tfctl

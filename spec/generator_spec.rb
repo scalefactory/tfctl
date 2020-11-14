@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative '../lib/tfctl/config.rb'
-require_relative '../lib/tfctl/generator.rb'
+require_relative '../lib/tfctl/config'
+require_relative '../lib/tfctl/generator'
 
 RSpec.describe Tfctl::Generator do
     # test data

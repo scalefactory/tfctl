@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'json_schemer'
-require_relative 'error.rb'
+require_relative 'error'
 
 # Config validator using JSON schema
 
