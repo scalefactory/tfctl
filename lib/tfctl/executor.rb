@@ -3,7 +3,7 @@
 require 'open3'
 require 'fileutils'
 require 'shellwords'
-require_relative 'error.rb'
+require_relative 'error'
 
 module Tfctl
     module Executor

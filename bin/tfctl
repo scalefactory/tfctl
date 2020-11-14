@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-if File.directory?(File.dirname(__FILE__) + '/../vendor')
+if File.directory?("#{File.dirname(__FILE__)}/../vendor")
     require 'bundler/setup'
 end
 require 'optparse'
@@ -81,8 +81,8 @@ begin
     targetting_opts = %i[account ou all]
     targets_set = []
     options.each do |k, v|
-        if targetting_opts.include?(k)
-            targets_set << k.to_s unless v.nil?
+        if targetting_opts.include?(k) and !v.nil?
+            targets_set << k.to_s
         end
     end
     if targets_set.length > 1
