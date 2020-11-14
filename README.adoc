@@ -58,7 +58,7 @@ other ways of managing accounts in AWS Organizations.
 == Requirements
 
  * Terraform >= 0.12
- * Ruby >= 2.4
+ * Ruby >= 2.5
  * Accounts managed in AWS Organizations (by Landing Zone, Control Tower, some
    other means)
 
