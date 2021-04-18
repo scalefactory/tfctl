@@ -31,23 +31,6 @@ toc::[]
 `tfctl` is a small Terraform wrapper for working with multi-account AWS
 infrastructures where new accounts may be created dynamically and on-demand.
 
-`tfctl` is an open source project published by The Scale Factory.
-
-We currently consider this project to be adopted.
-
-These are projects that we actively invest in because we or our customers find
-them useful on a day to day basis. We keep them security patched and ready for
-use in production environments.
-
-We’ll take a look at any issues or PRs you open and get back to you as soon as
-we can. We don’t offer any formal SLA, but we’ll be checking on this project
-periodically.
-
-If your issue is urgent, you can flag it as such, and we’ll attempt to triage
-appropriately, but we have paying customers who also have demands on our time.
-If your business depends on this project and you have an urgent problem, then
-you can talk to our sales team about paying us to support you.
-
 It discovers accounts by reading the AWS Organizations API, and can assign
 Terraform resources to multiple accounts based on the organization hierarchy.
 Resources can be assigned globally, based on organization unit or to individual
@@ -58,6 +41,23 @@ The Scale Factory originally created tfctl to integrate Terraform with
 https://aws.amazon.com/solutions/aws-landing-zone/[AWS Landing Zone] and
 https://aws.amazon.com/controltower/[Control Tower] but should work with most
 other ways of managing accounts in AWS Organizations.
+
+== Project status
+
+`tfctl` is an open source project published by The Scale Factory.
+
+We currently consider this project to be maintained but we don't actively
+develop new features.  We keep it security patched and ready for use in
+production environments.
+
+We’ll take a look at any issues or PRs you open and get back to you as soon as
+we can. We don’t offer any formal SLA, but we’ll be checking on this project
+periodically.
+
+If your issue is urgent, you can flag it as such, and we’ll attempt to triage
+appropriately, but we have paying customers who also have demands on our time.
+If your business depends on this project and you have an urgent problem, then
+you can talk to our sales team about paying us to support you.
 
 == Features
 
@@ -74,7 +74,7 @@ other ways of managing accounts in AWS Organizations.
 
 == Requirements
 
- * Terraform >= 0.12
+ * Terraform >= 0.12.29
  * Ruby >= 2.5
  * Accounts managed in AWS Organizations (by Landing Zone, Control Tower, some
    other means)
