@@ -121,7 +121,9 @@ module Tfctl
             return config unless config.key?(:exclude_accounts)
 
             config[:accounts].each_with_index do |account, idx|
+                # rubocop:disable Style/IfWithBooleanLiteralBranches
                 config[:accounts][idx][:excluded] = config[:exclude_accounts].include?(account[:name]) ? true : false
+                # rubocop:enable Style/IfWithBooleanLiteralBranches
             end
 
             config
