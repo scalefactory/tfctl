@@ -4,7 +4,6 @@
 pkg/
 *.gem
 vendor/
-.bundle
 bin/bundle
 bin/htmldiff
 bin/ldiff
