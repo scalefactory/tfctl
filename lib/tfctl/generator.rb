@@ -16,15 +16,21 @@ module Tfctl
 
         def make(account:, config:)
             target_dir = "#{PROJECT_ROOT}/.tfctl/#{config[:config_name]}/#{account[:name]}"
-            tf_version = config.fetch(:tf_required_version, '>= 0.12.0')
+            tf_version = config.fetch(:tf_required_version, '>= 0.12.29')
             aws_provider_version = config.fetch(:aws_provider_version, '>= 2.14')
 
             FileUtils.mkdir_p target_dir
 
             terraform_block = {
                 'terraform' => {
-                    'required_version' => tf_version,
-                    'backend'          => {
+                    'required_version'   => tf_version,
+                    'required_providers' => {
+                        'aws' => {
+                            'source'  => 'hashicorp/aws',
+                            'version' => aws_provider_version,
+                        },
+                    },
+                    'backend'            => {
                         's3' => {
                             'bucket'         => config[:tf_state_bucket],
                             'key'            => "#{account[:name]}/tfstate",
@@ -41,7 +47,6 @@ module Tfctl
             provider_block = {
                 'provider' => {
                     'aws' => {
-                        'version'     => aws_provider_version,
                         'region'      => account[:region],
                         'assume_role' => {
                             'role_arn' => "arn:aws:iam::#{account[:id]}:role/#{account[:tf_execution_role]}",
@@ -71,11 +76,8 @@ module Tfctl
                 profile_block = {
                     'module' => {
                         profile => {
-                            'source'    => "../../../profiles/#{profile}",
-                            'config'    => '${var.config}',
-                            'providers' => {
-                                'aws' => 'aws',
-                            },
+                            'source' => "../../../profiles/#{profile}",
+                            'config' => '${var.config}',
                         },
                     },
                 }

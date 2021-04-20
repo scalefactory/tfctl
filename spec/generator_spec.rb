@@ -35,7 +35,6 @@ RSpec.describe Tfctl::Generator do
         file = File.read("#{@generated_dir}/provider.tf.json")
         provider = JSON.parse(file)['provider']
 
-        expect(provider['aws']['version']).to eq(@config[:aws_provider_version])
         expect(provider['aws']['region']).to eq(@account[:region])
         expect(provider['aws']['assume_role']['role_arn']).to eq("arn:aws:iam::#{@account[:id]}:role/#{@account[:tf_execution_role]}")
     end
@@ -45,6 +44,8 @@ RSpec.describe Tfctl::Generator do
         terraform = JSON.parse(file)['terraform']
 
         expect(terraform['required_version']).to eq(@config[:tf_required_version])
+        expect(terraform['required_providers']['aws']['source']).to eq('hashicorp/aws')
+        expect(terraform['required_providers']['aws']['version']).to eq(@config[:aws_provider_version])
         expect(terraform['backend']['s3']['bucket']).to eq(@config[:tf_state_bucket])
         expect(terraform['backend']['s3']['key']).to eq("#{@account[:name]}/tfstate")
         expect(terraform['backend']['s3']['region']).to eq(@account[:region])
@@ -67,7 +68,6 @@ RSpec.describe Tfctl::Generator do
 
         expect(profile_module[profile_name]['source']).to eq("../../../profiles/#{profile_name}")
         expect(profile_module[profile_name]['config']).to eq('${var.config}')
-        expect(profile_module[profile_name]['providers']['aws']).to eq('aws')
     end
 
     it 'generates valid config auto tfvars' do

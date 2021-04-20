@@ -2,7 +2,8 @@
 
 vendor:
 	$(info => Installing Ruby dependencies)
-	@bundle install --path vendor --with developement --binstubs=vendor/bin
+	@bundle install
+	@bundle binstubs --all --path vendor/bin
 
 test: vendor rubocop spec
 

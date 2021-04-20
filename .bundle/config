@@ -1,0 +1,3 @@
+---
+BUNDLE_WITH: "developement"
+BUNDLE_BIN: "vendor/bin"
