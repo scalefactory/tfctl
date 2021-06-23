@@ -20,7 +20,7 @@ endif::[]
 
 = tfctl
 
-image:https://travis-ci.org/scalefactory/tfctl.svg?branch=master["Build Status", link="https://travis-ci.org/scalefactory/tfctl"]
+image:https://travis-ci.com/scalefactory/tfctl.svg?branch=master["Build Status", link="https://travis-ci.com/scalefactory/tfctl"]
 image:https://badge.fury.io/rb/tfctl.svg["Gem Version", link="https://badge.fury.io/rb/tfctl"]
 image:https://img.shields.io/badge/terraform-0.12-blue.svg["Terraform 0.12", link="https://img.shields.io/badge/terraform-0.12-blue"]
 
