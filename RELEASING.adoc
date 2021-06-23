@@ -6,8 +6,14 @@ releasing a new gem version.
 == Process
 
 * Smoke test in SF test accounts: https://github.com/scalefactory/tfctl-test
-* Bump version in `lib/tfctl/version.rb`
-* Update `CHANGELOG.adoc`
-* Commit
-* Create a new GitHub release and version tag using format: vX.X.X
-* TravisCI will build and release the gem automatically: https://travis-ci.org/github/scalefactory/tfctl
+* Bump version in `lib/tfctl/version.rb`.
+* Update `CHANGELOG.adoc`.
+* Commit.
+* Tag the release using format: vX.X.X and push the tag.
+
+----
+git tag vX.X.X
+git push origin vX.X.X
+----
+
+* GitHub actions will build and release the gem and create a GitHub release automatically.
