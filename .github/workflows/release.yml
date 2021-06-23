@@ -31,8 +31,10 @@ jobs:
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         with:
-          body: 'See [CHANGELOG](https://github.com/scalefactory/tfctl/blob/master/CHANGELOG.adoc) for details.'
+          #body: 'See [CHANGELOG](https://github.com/scalefactory/tfctl/blob/master/CHANGELOG.adoc) for details.'
+          body: 'Pipeline test, please ignore'
           draft: false
           prerelease: false
+          release_name: '${{ github.ref }}'
           tag_name: '${{ github.ref }}'
           files: pkg/*.gem
