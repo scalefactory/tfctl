@@ -146,7 +146,7 @@ begin
 
     log.info 'Working out AWS account topology'
 
-    yaml_config = YAML.safe_load(File.read(options[:config_file]))
+    yaml_config = YAML.safe_load(File.read(options[:config_file]),  aliases: true)
     Tfctl::Schema.validate(yaml_config)
     yaml_config.symbolize_names!
 
