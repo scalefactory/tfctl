@@ -23,18 +23,14 @@ jobs:
           touch $HOME/.gem/credentials
           chmod 0600 $HOME/.gem/credentials
           printf -- "---\n:rubygems_api_key: ${GEM_HOST_API_KEY}\n" > $HOME/.gem/credentials
-          # gem push pkg/*.gem
+          gem push pkg/*.gem
         env:
           GEM_HOST_API_KEY: "${{secrets.RUBYGEMS_AUTH_TOKEN}}"
       - name: Release on GitHub
-        uses: softprops/action-gh-release@v1
-        env:
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        uses: ncipollo/release-action@v1
         with:
-          #body: 'See [CHANGELOG](https://github.com/scalefactory/tfctl/blob/master/CHANGELOG.adoc) for details.'
-          body: 'Pipeline test, please ignore'
+          body: 'See [CHANGELOG](https://github.com/scalefactory/tfctl/blob/master/CHANGELOG.adoc) for details.'
+          token: "${{ secrets.GITHUB_TOKEN }}"
           draft: false
           prerelease: false
-          release_name: '${{ github.ref }}'
-          tag_name: '${{ github.ref }}'
-          files: pkg/*.gem
+          artifacts: pkg/*.gem
