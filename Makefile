@@ -32,6 +32,5 @@ clean:
 	$(info => Cleaning)
 	@rm -rf pkg/
 	@rm -rf vendor/
-	@rm -rf .bundle
 	@rm -f Gemfile.lock
 	@rm -rf spec/reports/

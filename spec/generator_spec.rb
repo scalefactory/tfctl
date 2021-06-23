@@ -6,7 +6,7 @@ require_relative '../lib/tfctl/generator'
 RSpec.describe Tfctl::Generator do
     # test data
     def yaml_config
-        YAML.safe_load(File.read("#{PROJECT_ROOT}/spec/data/config.yaml")).symbolize_names!
+        YAML.safe_load(File.read("#{PROJECT_ROOT}/spec/data/config.yaml"), aliases: true).symbolize_names!
     end
 
     def aws_org_config
