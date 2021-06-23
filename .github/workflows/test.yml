@@ -1,4 +1,4 @@
-name: RSpec tests
+name: Tests
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  test:
+  rspec:
     runs-on: ${{ matrix.os }}-latest
     strategy:
       fail-fast: false
