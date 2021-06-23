@@ -26,10 +26,8 @@ jobs:
           gem push pkg/*.gem
         env:
           GEM_HOST_API_KEY: "${{secrets.RUBYGEMS_AUTH_TOKEN}}"
-  release:
-    name: GitHub Release
-    steps:
-      - uses: actions/create-release@v1
+      - name: Release on GitHub
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         with:
