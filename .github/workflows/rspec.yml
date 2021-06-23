@@ -2,9 +2,9 @@ name: RSpec tests
 
 on:
   push:
-    branches: [ github_actions ]
+    branches: [ master ]
   pull_request:
-    branches: [ github_actions ]
+    branches: [ master ]
 
 jobs:
   test:
