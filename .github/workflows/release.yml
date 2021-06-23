@@ -27,7 +27,7 @@ jobs:
         env:
           GEM_HOST_API_KEY: "${{secrets.RUBYGEMS_AUTH_TOKEN}}"
       - name: Release on GitHub
-        uses: actions/create-release@v1
+        uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         with:
