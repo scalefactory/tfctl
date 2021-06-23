@@ -6,7 +6,7 @@ require_relative '../lib/tfctl/schema'
 
 RSpec.describe Tfctl::Schema do
     let(:yaml_config) do
-        YAML.safe_load(File.read("#{PROJECT_ROOT}/spec/data/config.yaml"))
+        YAML.safe_load(File.read("#{PROJECT_ROOT}/spec/data/config.yaml"), aliases: true)
     end
 
     subject do

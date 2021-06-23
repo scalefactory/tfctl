@@ -10,8 +10,11 @@ tf_required_version: '>= 0.12.29'
 aws_provider_version: '>= 2.14'
 tfctl_role_arn: 'arn:aws:iam::012345678900:role/TfCtlUser'
 
-data:
+# test yaml aliases
+data: &global_params
   global_param: 'global'
+
+data: *global_params
 
 # Organization config
 
