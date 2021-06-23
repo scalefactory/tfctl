@@ -23,7 +23,7 @@ jobs:
           touch $HOME/.gem/credentials
           chmod 0600 $HOME/.gem/credentials
           printf -- "---\n:rubygems_api_key: ${GEM_HOST_API_KEY}\n" > $HOME/.gem/credentials
-          gem push pkg/*.gem
+          # gem push pkg/*.gem
         env:
           GEM_HOST_API_KEY: "${{secrets.RUBYGEMS_AUTH_TOKEN}}"
       - name: Release on GitHub
@@ -31,7 +31,8 @@ jobs:
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         with:
+          body: 'See [CHANGELOG](https://github.com/scalefactory/tfctl/blob/master/CHANGELOG.adoc) for details.'
           draft: false
           prerelease: false
-          release_name: 'Release ${{ github.ref }}'
           tag_name: '${{ github.ref }}'
+          files: pkg/*.gem
