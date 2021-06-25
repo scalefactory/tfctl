@@ -3,6 +3,7 @@
 # Terraform settings
 
 tf_state_bucket: 'terraform-state'
+tf_state_prefix: 'prefix'
 tf_state_role_arn: 'arn:aws:iam::012345678900:role/TerraformStateUser'
 tf_state_dynamodb_table: 'terraform-lock'
 tf_state_region: 'eu-west-1'
