@@ -22,6 +22,7 @@ aws_provider_version: '>= 2.14'
 # Role used by tfctl to retrieve data from AWS Organizations
 # Has to be set up in the primary org account
 tfctl_role_arn: 'arn:aws:iam::PRIMARY_ACCOUNT_ID:role/TfctlRole'
+# default_tags: {}
 
 #
 # Data
