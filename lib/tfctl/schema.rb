@@ -48,6 +48,7 @@ module Tfctl
                         },
                         'data'                    => { 'type' => 'object' },
                         'exclude_accounts'        => { 'type' => 'array' },
+                        'default_tags'            => { 'type' => 'object' },
                         'organization_root'       => org_schema,
                         'organization_units'      => org_schema,
                         'account_overrides'       => org_schema,
