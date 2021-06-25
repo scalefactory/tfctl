@@ -13,6 +13,7 @@
 #
 
 tf_state_bucket: 'CHANGEME'
+# tf_state_prefix: ''
 tf_state_dynamodb_table: 'terraform-lock'
 tf_state_region: 'eu-west-1'
 # Role for accessing state resources
