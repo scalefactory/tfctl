@@ -34,6 +34,7 @@ module Tfctl
                     'type'       => 'object',
                     'properties' => {
                         'tf_state_bucket'         => { 'type' => 'string' },
+                        'tf_state_prefix'         => { 'type' => 'string' },
                         'tf_state_role_arn'       => {
                             'type'    => 'string',
                             'pattern' => iam_arn_pattern,
