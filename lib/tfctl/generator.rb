@@ -51,6 +51,9 @@ module Tfctl
                         'assume_role' => {
                             'role_arn' => "arn:aws:iam::#{account[:id]}:role/#{account[:tf_execution_role]}",
                         },
+                        'default_tags' => {
+                            'tags' => config.fetch(:default_tags, {})
+                        },
                     },
                 },
             }

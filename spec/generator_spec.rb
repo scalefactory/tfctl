@@ -37,6 +37,7 @@ RSpec.describe Tfctl::Generator do
 
         expect(provider['aws']['region']).to eq(@account[:region])
         expect(provider['aws']['assume_role']['role_arn']).to eq("arn:aws:iam::#{@account[:id]}:role/#{@account[:tf_execution_role]}")
+        expect(provider['aws']['default_tags']['tags']['terraform']).to eq('yes')
     end
 
     it 'generates valid terraform resource' do
