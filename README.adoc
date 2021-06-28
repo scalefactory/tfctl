@@ -21,7 +21,7 @@ endif::[]
 = tfctl
 
 image:https://github.com/scalefactory/tfctl/actions/workflows/linter.yml/badge.svg["Linter", link="https://github.com/scalefactory/tfctl/actions/workflows/linter.yml"]
-image:https://github.com/scalefactory/tfctl/actions/workflows/rspec.yml/badge.svg["RSpec tests", link="https://github.com/scalefactory/tfctl/actions/workflows/rspec.yml"]
+image:https://github.com/scalefactory/tfctl/actions/workflows/test.yml/badge.svg["Tests", link="https://github.com/scalefactory/tfctl/actions/workflows/test.yml"]
 image:https://badge.fury.io/rb/tfctl.svg["Gem Version", link="https://badge.fury.io/rb/tfctl"]
 image:https://img.shields.io/badge/terraform-0.12-blue.svg["Terraform 0.12", link="https://img.shields.io/badge/terraform-0.12-blue"]
 
