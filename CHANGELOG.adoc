@@ -1,5 +1,10 @@
 = Changelog
 
+== Upcoming
+
+ * feat: support for setting default tags at AWS provider level.  (Thanks @patrickli)
+   For details see: https://www.hashicorp.com/blog/default-tags-in-the-terraform-aws-provider
+
 == 1.4.0
 
  * feat: support yaml anchors and aliases in configuration file.
