@@ -48,7 +48,7 @@ RSpec.describe Tfctl::Generator do
         expect(terraform['required_providers']['aws']['source']).to eq('hashicorp/aws')
         expect(terraform['required_providers']['aws']['version']).to eq(@config[:aws_provider_version])
         expect(terraform['backend']['s3']['bucket']).to eq(@config[:tf_state_bucket])
-        expect(terraform['backend']['s3']['key']).to eq("#{@account[:name]}/tfstate")
+        expect(terraform['backend']['s3']['key']).to eq("#{@config[:tf_state_prefix]}/#{@account[:name]}/tfstate")
         expect(terraform['backend']['s3']['region']).to eq(@account[:region])
         expect(terraform['backend']['s3']['role_arn']).to eq(@config[:tf_state_role_arn])
         expect(terraform['backend']['s3']['dynamodb_table']).to eq(@config[:tf_state_dynamodb_table])

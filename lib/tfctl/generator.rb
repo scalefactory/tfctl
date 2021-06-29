@@ -16,6 +16,7 @@ module Tfctl
 
         def make(account:, config:)
             target_dir = "#{PROJECT_ROOT}/.tfctl/#{config[:config_name]}/#{account[:name]}"
+            tf_state_prefix = config.fetch(:tf_state_prefix, '').delete_suffix('/')
             tf_version = config.fetch(:tf_required_version, '>= 0.12.29')
             aws_provider_version = config.fetch(:aws_provider_version, '>= 2.14')
 
@@ -33,7 +34,7 @@ module Tfctl
                     'backend'            => {
                         's3' => {
                             'bucket'         => config[:tf_state_bucket],
-                            'key'            => "#{account[:name]}/tfstate",
+                            'key'            => [tf_state_prefix, account[:name], 'tfstate'].join('/').delete_prefix('/'),
                             'region'         => config[:tf_state_region],
                             'role_arn'       => config[:tf_state_role_arn],
                             'dynamodb_table' => config[:tf_state_dynamodb_table],
