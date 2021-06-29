@@ -4,6 +4,8 @@
 
  * feat: support for setting default tags at AWS provider level.  (Thanks @patrickli)
    For details see: https://www.hashicorp.com/blog/default-tags-in-the-terraform-aws-provider
+ * feat: new `tf_state_prefix` config parameter. (Thanks @patrickli)
+   Allows setting an path prefix for state files stored in S3.
 
 == 1.4.0
 
