@@ -138,7 +138,7 @@ begin
     log_level = options[:debug] ? Logger::DEBUG : Logger::INFO
     log = Tfctl::Logger.new(log_level)
 
-    log.info 'tfctl running'
+    log.info "tfctl #{Tfctl::VERSION} running"
 
     config_name = File.basename(options[:config_file]).chomp('.yaml')
     config_name = 'default' if config_name == 'tfctl'
