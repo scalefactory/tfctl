@@ -6,6 +6,7 @@
    For details see: https://www.hashicorp.com/blog/default-tags-in-the-terraform-aws-provider
  * feat: new `tf_state_prefix` config parameter. (Thanks @patrickli)
    Allows setting an path prefix for state files stored in S3.
+ * feat: print version number in output log
 
 == 1.4.0
 
