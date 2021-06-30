@@ -1,6 +1,6 @@
 = Changelog
 
-== Upcoming
+== 1.5.0
 
  * feat: support for setting default tags at AWS provider level.  (Thanks @patrickli)
    For details see: https://www.hashicorp.com/blog/default-tags-in-the-terraform-aws-provider
