@@ -80,8 +80,11 @@ module Tfctl
                 profile_block = {
                     'module' => {
                         profile => {
-                            'source' => "../../../profiles/#{profile}",
-                            'config' => '${var.config}',
+                            'source'    => "../../../profiles/#{profile}",
+                            'config'    => '${var.config}',
+                            'providers' => {
+                                'aws' => 'aws',
+                            },
                         },
                     },
                 }
