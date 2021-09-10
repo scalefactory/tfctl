@@ -41,6 +41,12 @@ module Tfctl
             # Create the command
             exec = [cmd] + [subcmd] + args
 
+            runcmd = if Gem.win_platform?
+                         exec.join(' ')
+                     else
+                         exec.shelljoin
+                     end
+
             # Set environment variables for Terraform
             env = {
                 'TF_INPUT'           => '0',
@@ -49,10 +55,10 @@ module Tfctl
                 # 'TF_LOG'             => 'TRACE'
             }
 
-            log.debug "#{account_name}: Executing: #{exec.shelljoin}"
+            log.debug "#{account_name}: Executing: #{runcmd}"
 
             FileUtils.cd path
-            Open3.popen3(env, exec.shelljoin) do |stdin, stdout, stderr, wait_thr|
+            Open3.popen3(env, runcmd) do |stdin, stdout, stderr, wait_thr|
                 stdin.close_write
 
                 # capture stdout and stderr in separate threads to prevent deadlocks
