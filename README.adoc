@@ -34,9 +34,8 @@ infrastructures where new accounts may be created dynamically and on-demand.
 
 It discovers accounts by reading the AWS Organizations API, and can assign
 Terraform resources to multiple accounts based on the organization hierarchy.
-Resources can be assigned globally, based on organization unit or to individual
-accounts.  It supports hierarchies of nested Organizational Units (OUs),
-and helps keep your Terraform DRY.
+Resources can be assigned globally, based on organization unit (OU) or to individual
+accounts.  It supports hierarchies of nested OUs, and helps keep your Terraform DRY.
 
 The Scale Factory originally created tfctl to integrate Terraform with
 https://aws.amazon.com/solutions/aws-landing-zone/[AWS Landing Zone] and
