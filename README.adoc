@@ -42,23 +42,6 @@ https://aws.amazon.com/solutions/aws-landing-zone/[AWS Landing Zone] and
 https://aws.amazon.com/controltower/[Control Tower] but should work with most
 other ways of managing accounts in AWS Organizations.
 
-== Project status
-
-`tfctl` is an open source project published by The Scale Factory.
-
-We currently consider this project to be maintained but we don't actively
-develop new features.  We keep it security patched and ready for use in
-production environments.
-
-We’ll take a look at any issues or PRs you open and get back to you as soon as
-we can. We don’t offer any formal SLA, but we’ll be checking on this project
-periodically.
-
-If your issue is urgent, you can flag it as such, and we’ll attempt to triage
-appropriately, but we have paying customers who also have demands on our time.
-If your business depends on this project and you have an urgent problem, then
-you can talk to our sales team about paying us to support you.
-
 == Features
 
 * Discovers AWS accounts automatically.
@@ -206,3 +189,20 @@ tfctl -a example-account -u -- plan
 This will show output in real time.  Usually output is buffered and displayed
 after the Terraform command finishes, to make it more readable when running
 across multiple accounts in parallel.
+
+== Project status
+
+`tfctl` is an open source project published by The Scale Factory.
+
+We currently consider this project to be maintained but we don't actively
+develop new features.  We keep it security patched and ready for use in
+production environments.
+
+We’ll take a look at any issues or PRs you open and get back to you as soon as
+we can. We don’t offer any formal SLA, but we’ll be checking on this project
+periodically.
+
+If your issue is urgent, you can flag it as such, and we’ll attempt to triage
+appropriately, but we have paying customers who also have demands on our time.
+If your business depends on this project and you have an urgent problem, then
+you can talk to our sales team about paying us to support you.
