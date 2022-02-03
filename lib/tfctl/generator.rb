@@ -9,9 +9,7 @@ module Tfctl
         module_function
 
         def write_json_block(path, block)
-            File.open(path, 'w') do |f|
-                f.write("#{JSON.pretty_generate(block)}\n")
-            end
+            File.write(path, "#{JSON.pretty_generate(block)}\n")
         end
 
         def make(account:, config:)

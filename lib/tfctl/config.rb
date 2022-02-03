@@ -105,7 +105,7 @@ module Tfctl
 
         def write_cache(cache_file)
             FileUtils.mkdir_p File.dirname(cache_file)
-            File.open(cache_file, 'w') { |f| f.write to_yaml }
+            File.write(cache_file, to_yaml)
         end
 
         def read_cache(cache_file)
