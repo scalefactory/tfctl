@@ -25,19 +25,22 @@ module Tfctl
 
                 parent_id = aws_ou_ids[ou_path]
 
-                @aws_org_client.list_accounts_for_parent(parent_id: parent_id).accounts.each do |account|
-                    next unless account.status == 'ACTIVE'
+                @aws_org_client.list_accounts_for_parent(parent_id: parent_id).each do |response|
+                    response.accounts.each do |account|
+                        next unless account.status == 'ACTIVE'
 
-                    output[:accounts] << {
-                        name:       account.name,
-                        id:         account.id,
-                        arn:        account.arn,
-                        email:      account.email,
-                        ou_path:    ou_path.to_s,
-                        ou_parents: ou_path.to_s.split('/'),
-                        profiles:   [],
-                    }
+                        output[:accounts] << {
+                            name:       account.name,
+                            id:         account.id,
+                            arn:        account.arn,
+                            email:      account.email,
+                            ou_path:    ou_path.to_s,
+                            ou_parents: ou_path.to_s.split('/'),
+                            profiles:   [],
+                        }
+                    end
                 end
+
             end
             output
         end
@@ -71,8 +74,8 @@ module Tfctl
             @aws_org_client.list_children(
                 child_type: 'ORGANIZATIONAL_UNIT',
                 parent_id:  parent_id,
-            ).each do |resp|
-                resp.children.each do |child|
+            ).each do |response|
+                response.children.each do |child|
 
                     begin
                         ou = @aws_org_client.describe_organizational_unit(
