@@ -1,5 +1,9 @@
 = Changelog
 
+== 1.6.1
+
+ * fix: pagination problem when listing accounts in an OU.
+
 == 1.6.0
 
  * fix: pass the default AWS provider explicitly from tfctl generated configuration.
