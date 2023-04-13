@@ -1,5 +1,9 @@
 = Changelog
 
+== 1.7.0
+
+ * feat: added a `-p` flag to configure parallelism
+
 == 1.6.1
 
  * fix: pagination problem when listing accounts in an OU.
