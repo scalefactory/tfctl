@@ -57,8 +57,8 @@ optparse = OptionParser.new do |opts|
     opts.on('-d', '--debug', 'Turn on debug messages') do
         options[:debug] = true
     end
-    opts.on('-p', '--parallelism', 'How many terraform processes to execute in parallel') do
-        options[:debug] = true
+    opts.on('-p', '--parallelism=num', 'How many terraform processes to execute in parallel') do |o|
+        options[:parallelism] = o.to_i
     end
     opts.on('-v', '--version', 'Show version') do
         puts Tfctl::VERSION
