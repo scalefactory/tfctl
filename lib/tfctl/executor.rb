@@ -88,7 +88,7 @@ module Tfctl
                 FileUtils.rm_f plan_file if args[0] == 'apply' # tidy up the plan file
 
                 unless status.exitstatus.zero?
-                    raise Tfctl::Error, "#{cmd} failed with exit code: #{status.exitstatus}"
+                    raise Tfctl::Error, "#{account_name}: #{runcmd} failed with exit code: #{status.exitstatus}"
                 end
             end
         end
