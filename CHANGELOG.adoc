@@ -3,6 +3,9 @@
 == 1.7.0
 
  * feat: added a `-p` flag to configure parallelism
+ * feat: enhanced the executor output when raising `Tfctl::Error`, it will now
+   report the `account_name` that raised the error along with the full command
+   that was being run
 
 == 1.6.1
 
