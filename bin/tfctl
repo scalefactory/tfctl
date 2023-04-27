@@ -26,6 +26,7 @@ options = {
     unbuffered:  false,
     debug:       false,
     use_cache:   false,
+    parallelism: 8,
 }
 
 optparse = OptionParser.new do |opts|
@@ -55,6 +56,9 @@ optparse = OptionParser.new do |opts|
     end
     opts.on('-d', '--debug', 'Turn on debug messages') do
         options[:debug] = true
+    end
+    opts.on('-p', '--parallelism=num', 'How many terraform processes to execute in parallel') do |o|
+        options[:parallelism] = o.to_i
     end
     opts.on('-v', '--version', 'Show version') do
         puts Tfctl::VERSION
@@ -93,7 +97,7 @@ begin
         raise OptionParser::InvalidOption, 'Please specify target'
     end
 rescue OptionParser::InvalidOption, OptionParser::MissingArgument
-    warn $ERROR_INFO.to_s
+    warn $ERROR_INFO
     warn optparse
     exit 2
 end
@@ -202,7 +206,7 @@ begin
 
     # Execute Terraform in target accounts
 
-    Parallel.each(accounts, in_processes: 8) do |ac|
+    Parallel.each(accounts, in_processes: options[:parallelism]) do |ac|
         run_account(config, ac, options, ARGV, log)
     end
 
