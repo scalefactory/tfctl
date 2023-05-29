@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
     # Think when adding new dependencies.  Is it really necessary?
     # "The things you own end up owning you" etc.
     spec.add_dependency 'aws-sdk-organizations', '~> 1.40'
-    spec.add_dependency 'json_schemer',          '~> 0.2'
+    spec.add_dependency 'json_schemer',          '>= 0.2', '< 2.0'
     spec.add_dependency 'parallel',              '~> 1.19'
     spec.add_dependency 'terminal-table',        '>= 1.8', '< 4.0'
 
