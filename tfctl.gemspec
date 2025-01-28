@@ -29,7 +29,7 @@ Gem::Specification.new do |spec|
     spec.add_dependency 'aws-sdk-organizations', '~> 1.40'
     spec.add_dependency 'json_schemer',          '>= 0.2', '< 3.0'
     spec.add_dependency 'parallel',              '~> 1.19'
-    spec.add_dependency 'terminal-table',        '>= 1.8', '< 4.0'
+    spec.add_dependency 'terminal-table',        '>= 1.8', '< 5.0'
 
     spec.add_development_dependency 'guard-rspec',   '~> 4.7'
     spec.add_development_dependency 'rspec',         '~> 3.9'
